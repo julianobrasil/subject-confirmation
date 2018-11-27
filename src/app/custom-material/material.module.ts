@@ -53,6 +53,7 @@ import {
   MatToolbarModule,
   MatTooltipModule,
   MatDividerModule,
+  MatBadgeModule,
 } from '@angular/material';
 
 import {LayoutModule} from '@angular/cdk/layout';
@@ -64,6 +65,7 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
   exports: [
     FlexLayoutModule,
     MatAutocompleteModule,
+    MatBadgeModule,
     MatBottomSheetModule,
     MatButtonModule,
     MatCardModule,

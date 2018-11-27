@@ -10,10 +10,10 @@ import {
 
 import {SatPopoverAnchor} from '@ncstate/sat-popover';
 
-import {SyllabusItem} from '../subject-confirmation.service';
+import {TimelineItem, ObjectReference, MergePlanning} from '../subject-confirmation.service';
 
 export enum SubjectCellComponentActions {
-  /** ratirica disciplina sem junção */
+  /** ratifica disciplina sem junção */
   CONFIRMATION_NO_MERGE = 'CONFIRMATION_NO_MERGE',
 
   /** cancela ratificação desta disciplina */
@@ -28,6 +28,7 @@ export enum SubjectCellComponentActions {
 
 export interface SubjectCellComponentEvent {
   actionType: SubjectCellComponentActions;
+  timelineItem: TimelineItem;
 }
 
 @Component({
@@ -37,8 +38,20 @@ export interface SubjectCellComponentEvent {
 })
 export class SubjectCellComponent implements AfterViewInit {
   /** item da matriz: provavelmente teremos outro input aqui, relativo à timeline */
+  private _timelineItem: TimelineItem;
   @Input()
-  syllabusItem: SyllabusItem;
+  get timelineItem(): TimelineItem {
+    return this._timelineItem;
+  }
+  set timelineItem(t: TimelineItem) {
+    this._timelineItem = t;
+
+    this._setMerginStatus();
+  }
+
+  /** período letivo que está sendo alvo da ratificação */
+  @Input()
+  targetLecturePeriodRef: ObjectReference;
 
   /** emite quando o usuário escolha uma opção do menu de contexto */
   @Output()
@@ -71,6 +84,16 @@ export class SubjectCellComponent implements AfterViewInit {
   _openContextMenu(evt: MouseEvent, popoverAnchor: SatPopoverAnchor) {
     evt.preventDefault();
 
+    if (
+      this.timelineItem &&
+      this.timelineItem.performedData &&
+      !!this.timelineItem.performedData.lecturePeriodRef &&
+      !!this.targetLecturePeriodRef &&
+      this.timelineItem.performedData.lecturePeriodRef.code !== this.targetLecturePeriodRef.code
+    ) {
+      return;
+    }
+
     popoverAnchor.openPopover();
   }
 
@@ -81,24 +104,41 @@ export class SubjectCellComponent implements AfterViewInit {
   }
 
   _changeSubjectStatus(action: SubjectCellComponentActions): void {
+    const timelineItem: TimelineItem = {...this.timelineItem};
+
+    timelineItem.performedData = timelineItem.performedData
+      ? {...timelineItem.performedData, mergingPlanned: MergePlanning.MERGED_INSIDE_COURSE}
+      : {
+          electiveSubject: null,
+          equivalentSubject: null,
+          lecturePeriodRef: this.targetLecturePeriodRef,
+          mergedTimeLineItems: [],
+          mergingPlanned: null,
+          sequence: null, // TODO(@julianobrasil): é preciso inferir o período/módulo do curso aqui
+        };
+
     switch (action) {
       case SubjectCellComponentActions.CANCEL_CONFIRMATION: {
-        this._cancelConfirmation();
+        timelineItem.performedData = null;
+        this._cancelConfirmation(timelineItem);
         break;
       }
 
       case SubjectCellComponentActions.CONFIRMATION_MERGED_INSIDE_COURSE: {
-        this._confirmMergingInsideCourse();
+        timelineItem.performedData.mergingPlanned = MergePlanning.MERGED_INSIDE_COURSE;
+        this._confirmMergingInsideCourse(timelineItem);
         break;
       }
 
       case SubjectCellComponentActions.CONFIRMATION_MERGE_OTHER_COURSES: {
-        this._confirmMergeOtherCourses();
+        timelineItem.performedData.mergingPlanned = MergePlanning.MERGE_OTHER_COURSES;
+        this._confirmMergeOtherCourses(timelineItem);
         break;
       }
 
       case SubjectCellComponentActions.CONFIRMATION_NO_MERGE: {
-        this._confirmNoMerging();
+        timelineItem.performedData.mergingPlanned = MergePlanning.NO_MERGE;
+        this._confirmNoMerging(timelineItem);
         break;
       }
     }
@@ -107,7 +147,7 @@ export class SubjectCellComponent implements AfterViewInit {
   /**
    * Ratifica sem nenhuma junção
    */
-  _confirmNoMerging(): void {
+  _confirmNoMerging(timelineItem: TimelineItem): void {
     this._wrapperClass = {
       ...this._wrapperClass,
       'saga-syllabus-item-container-confirm-no-merge': true,
@@ -117,6 +157,7 @@ export class SubjectCellComponent implements AfterViewInit {
 
     this.action.emit({
       actionType: SubjectCellComponentActions.CONFIRMATION_NO_MERGE,
+      timelineItem,
     });
 
     this._status = SubjectCellComponentActions.CONFIRMATION_NO_MERGE;
@@ -125,7 +166,7 @@ export class SubjectCellComponent implements AfterViewInit {
   /**
    * Ratifica com junção entre cursos
    */
-  _confirmMergeOtherCourses(): void {
+  _confirmMergeOtherCourses(timelineItem: TimelineItem): void {
     this._wrapperClass = {
       ...this._wrapperClass,
       'saga-syllabus-item-container-confirm-no-merge': false,
@@ -135,6 +176,7 @@ export class SubjectCellComponent implements AfterViewInit {
 
     this.action.emit({
       actionType: SubjectCellComponentActions.CONFIRMATION_MERGE_OTHER_COURSES,
+      timelineItem,
     });
 
     this._status = SubjectCellComponentActions.CONFIRMATION_MERGE_OTHER_COURSES;
@@ -143,7 +185,7 @@ export class SubjectCellComponent implements AfterViewInit {
   /**
    * Ratifica com junção entre períodos do mesmo curso
    */
-  _confirmMergingInsideCourse(): void {
+  _confirmMergingInsideCourse(timelineItem: TimelineItem): void {
     this._wrapperClass = {
       ...this._wrapperClass,
       'saga-syllabus-item-container-confirm-no-merge': false,
@@ -153,6 +195,7 @@ export class SubjectCellComponent implements AfterViewInit {
 
     this.action.emit({
       actionType: SubjectCellComponentActions.CONFIRMATION_MERGED_INSIDE_COURSE,
+      timelineItem,
     });
 
     this._status = SubjectCellComponentActions.CONFIRMATION_MERGED_INSIDE_COURSE;
@@ -161,7 +204,7 @@ export class SubjectCellComponent implements AfterViewInit {
   /**
    * Cancela a ratificação
    */
-  _cancelConfirmation(): void {
+  _cancelConfirmation(timelineItem: TimelineItem): void {
     this._wrapperClass = {
       ...this._wrapperClass,
       'saga-syllabus-item-container-confirm-no-merge': false,
@@ -169,8 +212,13 @@ export class SubjectCellComponent implements AfterViewInit {
       'saga-syllabus-item-container-confirm-merge-outer': false,
     };
 
+    timelineItem.performedData = timelineItem.performedData
+      ? {...timelineItem.performedData, lecturePeriodRef: this.targetLecturePeriodRef}
+      : timelineItem.performedData;
+
     this.action.emit({
       actionType: SubjectCellComponentActions.CANCEL_CONFIRMATION,
+      timelineItem,
     });
 
     this._status = SubjectCellComponentActions.CANCEL_CONFIRMATION;
@@ -194,5 +242,51 @@ export class SubjectCellComponent implements AfterViewInit {
   /** mostra botão de confirmar sem junção  */
   get _showConfirmationWithNoMergeButton(): boolean {
     return this._status !== SubjectCellComponentActions.CONFIRMATION_NO_MERGE;
+  }
+
+  /**
+   * indica se existe junção (essa informação é preenchida somente no momento em que o horário é
+   *     montado, ou seja, no momento da ratificação, nada é apresentado)
+   */
+  get _mergedBadgeText(): string {
+    return this.timelineItem &&
+      this.timelineItem.performedData &&
+      this.timelineItem.performedData.mergedTimeLineItems &&
+      this.timelineItem.performedData.mergedTimeLineItems.length
+      ? 'J'
+      : '';
+  }
+
+  /**
+   * Converte o status de junção (planejada), para as cores definidas (aplicadas somente nas
+   *     discplinas do semestre corrente)
+   *
+   */
+  private _setMerginStatus(): void {
+    if (
+      !this._timelineItem ||
+      !this._timelineItem.performedData ||
+      !this._timelineItem.performedData.lecturePeriodRef ||
+      (!!this.targetLecturePeriodRef &&
+        this.targetLecturePeriodRef.code !== this._timelineItem.performedData.lecturePeriodRef.code)
+    ) {
+      return;
+    }
+
+    switch (this._timelineItem.performedData.mergingPlanned) {
+      case MergePlanning.MERGED_INSIDE_COURSE: {
+        this._status = SubjectCellComponentActions.CONFIRMATION_MERGED_INSIDE_COURSE;
+        break;
+      }
+
+      case MergePlanning.MERGE_OTHER_COURSES: {
+        this._status = SubjectCellComponentActions.CONFIRMATION_MERGE_OTHER_COURSES;
+        break;
+      }
+
+      default: {
+        this._status = SubjectCellComponentActions.CONFIRMATION_NO_MERGE;
+      }
+    }
   }
 }

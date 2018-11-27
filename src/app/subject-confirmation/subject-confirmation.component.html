@@ -1,8 +1,17 @@
 <app-subject-confirmation-timeline></app-subject-confirmation-timeline>
 
 <app-subject-cell (action)="_actionHandler($event)"
-[syllabusItem]="_syllabusItemTest"></app-subject-cell>
+                  [targetLecturePeriodRef]="_lecturePeriodRefTest"
+                  [timelineItem]="_timelineItemTest">
+</app-subject-cell>
 
 <br>
 
-O que você fez: {{actionTaken}}
+O que você fez:
+<pre>
+    {{actionTaken | json}}
+</pre>
+
+<pre>
+  {{_timelineItemTest | json}}
+</pre>

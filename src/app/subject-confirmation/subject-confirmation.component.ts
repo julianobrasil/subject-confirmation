@@ -1,8 +1,6 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import {Component, ViewEncapsulation} from '@angular/core';
 
-import {
-  SyllabusItem,
-} from './subject-confirmation.service';
+import {SyllabusItem, TimelineItem, ObjectReference, MergePlanning} from './subject-confirmation.service';
 
 import {
   SubjectCellComponentEvent,
@@ -18,19 +16,37 @@ import * as moment from 'moment';
   encapsulation: ViewEncapsulation.None,
 })
 export class SubjectConfirmationComponent {
-  _syllabusItemTest: SyllabusItem = {
-    creditHours: 300,
-    equivalences: '',
-    preRequirements: '',
-    subjectCode: 'ENG2017200',
-    subjectDescription:
-      'EMPREENDEDORISMO E JOGOS DE EMPRESAS APLICADOS À ENGENHARIA DE CONTROLE E AUTOMAÇÃO',
-    suggestedSequence: 1,
+  _lecturePeriodRefTest: ObjectReference = {
+    code: '12323243243',
+    description: '2018-1',
   };
 
-  actionTaken: SubjectCellComponentActions;
+  _timelineItemTest: TimelineItem = {
+    performedData: {
+      electiveSubject: null,
+      equivalentSubject: null,
+      lecturePeriodRef: {
+        code: '12323243243',
+        description: '2018-1',
+      },
+      mergedTimeLineItems: [],
+      mergingPlanned: MergePlanning.NO_MERGE,
+      sequence: null,
+    },
+    syllabusItem: {
+      creditHours: 300,
+      equivalences: '',
+      preRequirements: '',
+      subjectCode: 'ENG2017200',
+      subjectDescription:
+        'EMPREENDEDORISMO E JOGOS DE EMPRESAS APLICADOS À ENGENHARIA DE CONTROLE E AUTOMAÇÃO',
+      suggestedSequence: 1,
+    },
+  };
+
+  actionTaken: SubjectCellComponentEvent;
 
   _actionHandler(evt: SubjectCellComponentEvent) {
-    this.actionTaken = evt.actionType;
+    this.actionTaken = evt;
   }
 }

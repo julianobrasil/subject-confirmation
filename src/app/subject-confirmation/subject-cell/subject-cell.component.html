@@ -4,15 +4,16 @@
      [satPopoverAnchorFor]="popover"
      [ngClass]="_wrapperClass">
   <div class="saga-syllabus-item-name">
-    <div>{{ syllabusItem?.subjectDescription }}</div>
+    <div>{{ timelineItem?.syllabusItem?.subjectDescription }}</div>
   </div>
 
   <div class="saga-syllabus-item-code">
-    <div>{{ syllabusItem?.subjectCode }}</div>
+    <div>{{ timelineItem?.syllabusItem?.subjectCode }}</div>
   </div>
 
   <div class="saga-syllabus-item-ch">
-    <div>{{ syllabusItem?.creditHours }}</div>
+    <div [matBadge]="_mergedBadgeText"
+         matBadgeColor="warn">{{ timelineItem?.syllabusItem?.creditHours }}</div>
   </div>
 </div>
 
