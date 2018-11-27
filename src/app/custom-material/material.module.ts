@@ -52,6 +52,7 @@ import {
   MatTabsModule,
   MatToolbarModule,
   MatTooltipModule,
+  MatDividerModule,
 } from '@angular/material';
 
 import {LayoutModule} from '@angular/cdk/layout';
@@ -69,6 +70,7 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     MatCheckboxModule,
     MatDatepickerModule,
     MatDialogModule,
+    MatDividerModule,
     MatFormFieldModule,
     MatTableModule,
     MatExpansionModule,
@@ -115,4 +117,4 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     {provide: LOCALE_ID, useValue: 'pt'},
   ],
 })
-export class MaterialModule {}
+export class MaterialModule { }

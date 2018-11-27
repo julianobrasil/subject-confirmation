@@ -1,1 +1,8 @@
 <app-subject-confirmation-timeline></app-subject-confirmation-timeline>
+
+<app-subject-cell (action)="_actionHandler($event)"
+[syllabusItem]="_syllabusItemTest"></app-subject-cell>
+
+<br>
+
+O que você fez: {{actionTaken}}

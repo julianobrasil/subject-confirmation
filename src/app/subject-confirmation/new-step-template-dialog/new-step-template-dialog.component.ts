@@ -1,4 +1,11 @@
-import { Component, Input, EventEmitter, Output, Inject, OnDestroy } from '@angular/core';
+import {
+  Component,
+  Input,
+  EventEmitter,
+  Output,
+  Inject,
+  OnDestroy,
+} from '@angular/core';
 
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
@@ -9,7 +16,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { Disciplina, SubjectConfirmationService } from '../subject-confirmation.service';
+import { SubjectConfirmationService } from '../subject-confirmation.service';
 
 import * as moment from 'moment';
 type Moment = moment.Moment;
@@ -30,18 +37,23 @@ export class NewStepTemplateDialogComponent implements OnDestroy {
 
   private _destroy$: Subject<void> = new Subject<void>();
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private _dialogRef: MatDialogRef<NewStepTemplateDialogComponent>, private _fb: FormBuilder,
-    private _breakpointObserver: BreakpointObserver, private _componentService: SubjectConfirmationService) {
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private _dialogRef: MatDialogRef<NewStepTemplateDialogComponent>,
+    private _fb: FormBuilder,
+    private _breakpointObserver: BreakpointObserver,
+    private _componentService: SubjectConfirmationService,
+  ) {
     this._form = this._fb.group({
       name: [null, Validators.required],
       startDate: null,
-      endDate: null
-    })
+      endDate: null,
+    });
     if (this.data && this.data.step) {
       this._form.patchValue({
         name: data.step.name,
         startDate: data.step.startDate,
-        endDate: data.step.endDate
+        endDate: data.step.endDate,
       });
     }
 
@@ -79,22 +91,6 @@ export class NewStepTemplateDialogComponent implements OnDestroy {
     return {
       'saga-dialog-form-container-dates': !this._verySmallScreen,
       'saga-dialog-form-container-dates-small': this._verySmallScreen,
-    }
-  }
-
-  get _maxMinDate(): Moment {
-    return this._componentService.maxMinDate(this.data.step, this.data.maxDate);
-  }
-
-  get _minMinDate(): Moment {
-    return this._componentService.minMinDate(this.data.minDate);
-  }
-
-  get _minMaxDate(): Moment {
-    return this._componentService.minMaxDate(this.data.step, this.data.minDate);
-  }
-
-  get _maxMaxDate(): Moment {
-    return this._componentService.maxMaxDate(this.data.maxDate);
+    };
   }
 }
