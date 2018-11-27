@@ -1,54 +1,76 @@
-<div #wrapperDiv #popoverAnchor="satPopoverAnchor" (contextmenu)="_openContextMenu($event,popoverAnchor)"
-  [satPopoverAnchorFor]="popover" [ngClass]="_wrapperClass">
+<div #wrapperDiv
+     #popoverAnchor="satPopoverAnchor"
+     (contextmenu)="_openContextMenu($event, popoverAnchor)"
+     [satPopoverAnchorFor]="popover"
+     [ngClass]="_wrapperClass">
   <div class="saga-syllabus-item-name">
-    <div>{{syllabusItem?.subjectDescription}}</div>
+    <div>{{ syllabusItem?.subjectDescription }}</div>
   </div>
 
   <div class="saga-syllabus-item-code">
-    <div>{{syllabusItem?.subjectCode}}</div>
+    <div>{{ syllabusItem?.subjectCode }}</div>
   </div>
 
   <div class="saga-syllabus-item-ch">
-    <div>{{syllabusItem?.creditHours}}</div>
+    <div>{{ syllabusItem?.creditHours }}</div>
   </div>
 </div>
 
-
-<sat-popover #popover [autoFocus]="false" verticalAlign="below" horizontalAlign="center"
-  hasBackdrop>
+<sat-popover #popover
+             [autoFocus]="false"
+             verticalAlign="below"
+             horizontalAlign="center"
+             hasBackdrop>
   <div class="mat-elevation-z8">
-    <div class="saga-syllabus-popover-wrapper" [ngStyle]="_wrapperDivWidth"
-      fxLayout="column" fxLayoutAlign="start center">
-
-      <button *ngIf="_status !== _ACTIONS.CONFIRMATION_NO_MERGE" (click)="_confirmSubject(popoverAnchor, _ACTIONS.CONFIRMATION_NO_MERGE)"
-        mat-button type="button">
-        <mat-icon>check</mat-icon>
-        <span class="saga-syllabus-menu-item">Sem junção</span>
+    <div class="saga-syllabus-popover-wrapper"
+         [ngStyle]="_wrapperDivWidth"
+         fxLayout="column"
+         fxLayoutAlign="start center">
+      <button *ngIf="_showConfirmationWithNoMergeButton"
+              (click)="_confirmSubject(popoverAnchor, _ACTIONS.CONFIRMATION_NO_MERGE)"
+              mat-button
+              type="button">
+        <mat-icon>done</mat-icon>
+        <span class="saga-syllabus-menu-item">Ofertar Sem junção</span>
       </button>
 
-      <button *ngIf="_status !== _ACTIONS.CONFIRMATION_MERGED_INSIDE_COURSE"
-        (click)="_confirmSubject(popoverAnchor, _ACTIONS.CONFIRMATION_MERGED_INSIDE_COURSE)"
-        mat-button type="button">
-        <mat-icon>check</mat-icon>
-        <span class="saga-syllabus-menu-item">Junção dentro do curso</span>
+      <button *ngIf="_showMergeInsideCourseButton"
+              (click)="
+          _confirmSubject(
+            popoverAnchor,
+            _ACTIONS.CONFIRMATION_MERGED_INSIDE_COURSE
+          )
+        "
+              mat-button
+              type="button">
+        <mat-icon>done_all</mat-icon>
+        <span class="saga-syllabus-menu-item">Ofertar com junção dentro do curso</span>
       </button>
 
-      <button *ngIf="_status !== _ACTIONS.CONFIRMATION_MERGE_OTHER_COURSES"
-        (click)="_confirmSubject(popoverAnchor, _ACTIONS.CONFIRMATION_MERGE_OTHER_COURSES)"
-        mat-button type="button">
-        <mat-icon>check</mat-icon>
-        <span class="saga-syllabus-menu-item">Junção entre cursos</span>
+      <button *ngIf="_showMergeToOthersButton"
+              (click)="
+          _confirmSubject(
+            popoverAnchor,
+            _ACTIONS.CONFIRMATION_MERGE_OTHER_COURSES
+          )
+        "
+              mat-button
+              type="button">
+        <mat-icon>done_outline</mat-icon>
+        <span class="saga-syllabus-menu-item">Ofertar com junção entre cursos</span>
       </button>
 
-      <mat-divider *ngIf="!!_status && _status !== _ACTIONS.CANCEL_CONFIRMATION"></mat-divider>
+      <div class="saga-full-width">
+        <mat-divider *ngIf="!!_status && _status !== _ACTIONS.CANCEL_CONFIRMATION"></mat-divider>
+      </div>
 
-      <button *ngIf="!!_status && _status !== _ACTIONS.CANCEL_CONFIRMATION"
-        (click)="_confirmSubject(popoverAnchor, _ACTIONS.CANCEL_CONFIRMATION)"
-        mat-button type="button">
-        <mat-icon>check</mat-icon>
-        <span class="saga-syllabus-menu-item">Cancelar junção</span>
+      <button *ngIf="_showCancelButton"
+              (click)="_confirmSubject(popoverAnchor, _ACTIONS.CANCEL_CONFIRMATION)"
+              mat-button
+              type="button">
+        <mat-icon>reply</mat-icon>
+        <span class="saga-syllabus-menu-item">Cancelar oferta</span>
       </button>
-
     </div>
   </div>
 </sat-popover>

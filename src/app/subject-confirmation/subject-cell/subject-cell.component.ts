@@ -8,9 +8,9 @@ import {
   EventEmitter,
 } from '@angular/core';
 
-import { SatPopoverAnchor } from '@ncstate/sat-popover';
+import {SatPopoverAnchor} from '@ncstate/sat-popover';
 
-import { SyllabusItem } from '../subject-confirmation.service';
+import {SyllabusItem} from '../subject-confirmation.service';
 
 export enum SubjectCellComponentActions {
   /** ratirica disciplina sem junção */
@@ -42,9 +42,7 @@ export class SubjectCellComponent implements AfterViewInit {
 
   /** emite quando o usuário escolha uma opção do menu de contexto */
   @Output()
-  action: EventEmitter<SubjectCellComponentEvent> = new EventEmitter<
-    SubjectCellComponentEvent
-  >();
+  action: EventEmitter<SubjectCellComponentEvent> = new EventEmitter<SubjectCellComponentEvent>();
 
   /** div principal, que envolve toda a célula */
   @ViewChild('wrapperDiv') _wrapperDiv: ElementRef;
@@ -56,7 +54,7 @@ export class SubjectCellComponent implements AfterViewInit {
   _ACTIONS = SubjectCellComponentActions;
 
   /** classe que envolve toda a div de celula */
-  _wrapperClass: { [key: string]: boolean } = {
+  _wrapperClass: {[key: string]: boolean} = {
     'saga-syllabus-item-container': true,
   };
 
@@ -67,9 +65,7 @@ export class SubjectCellComponent implements AfterViewInit {
 
     const boundingRect: ClientRect | DOMRect = div.getBoundingClientRect();
 
-    setTimeout(
-      () => (this._wrapperDivWidth = { width: `${boundingRect.width}px` }),
-    );
+    setTimeout(() => (this._wrapperDivWidth = {width: `${boundingRect.width}px`}));
   }
 
   _openContextMenu(evt: MouseEvent, popoverAnchor: SatPopoverAnchor) {
@@ -78,10 +74,7 @@ export class SubjectCellComponent implements AfterViewInit {
     popoverAnchor.openPopover();
   }
 
-  _confirmSubject(
-    popoverAnchor: SatPopoverAnchor,
-    action: SubjectCellComponentActions,
-  ): void {
+  _confirmSubject(popoverAnchor: SatPopoverAnchor, action: SubjectCellComponentActions): void {
     popoverAnchor.closePopover();
 
     this._changeSubjectStatus(action);
@@ -162,8 +155,7 @@ export class SubjectCellComponent implements AfterViewInit {
       actionType: SubjectCellComponentActions.CONFIRMATION_MERGED_INSIDE_COURSE,
     });
 
-    this._status =
-      SubjectCellComponentActions.CONFIRMATION_MERGED_INSIDE_COURSE;
+    this._status = SubjectCellComponentActions.CONFIRMATION_MERGED_INSIDE_COURSE;
   }
 
   /**
@@ -182,5 +174,25 @@ export class SubjectCellComponent implements AfterViewInit {
     });
 
     this._status = SubjectCellComponentActions.CANCEL_CONFIRMATION;
+  }
+
+  /** mostra o botão de cancelar */
+  get _showCancelButton(): boolean {
+    return !!this._status && this._status !== SubjectCellComponentActions.CANCEL_CONFIRMATION;
+  }
+
+  /** mostra botão de marcar como junção com outros cursos */
+  get _showMergeToOthersButton(): boolean {
+    return this._status !== SubjectCellComponentActions.CONFIRMATION_MERGE_OTHER_COURSES;
+  }
+
+  /** mostra botão de marcar como junção dentro de um mesmo curso */
+  get _showMergeInsideCourseButton(): boolean {
+    return this._status !== SubjectCellComponentActions.CONFIRMATION_MERGED_INSIDE_COURSE;
+  }
+
+  /** mostra botão de confirmar sem junção  */
+  get _showConfirmationWithNoMergeButton(): boolean {
+    return this._status !== SubjectCellComponentActions.CONFIRMATION_NO_MERGE;
   }
 }
