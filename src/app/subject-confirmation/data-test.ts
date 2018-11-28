@@ -7,8 +7,9 @@ import {
   SyllabusInformation,
 } from './subject-confirmation.service';
 
-import * as moment from 'moment';
-type Moment = moment.Moment;
+import * as _moment from 'moment';
+import {default as _rollupMoment} from 'moment';
+const moment = _rollupMoment || _moment;
 
 export const _timelineItemTestConfirmed: TimelineItem = {
   performed: {
