@@ -7,13 +7,6 @@ import {BehaviorSubject} from 'rxjs';
 import * as moment from 'moment';
 type Moment = moment.Moment;
 
-export enum Status {
-  IN_PROGRESS = 'IN_PROGRESS',
-  NOT_STARTED = 'NOT_STARTED',
-  FINISHED = 'FINISHED',
-  OVERDUE = 'OVERDUE',
-}
-
 export interface User {
   name: string;
   email: string;
@@ -79,7 +72,16 @@ export interface MergedTimeLine {
   /** curso que participa da junção */
   courseRef: ObjectReference;
 
-  /** período da timeline que está participando da junção */
+  /** unidade do curso que participa da junção */
+  campusRef: ObjectReference;
+
+  /** tipo do curso que participa da junção */
+  courseTypeRef: ObjectReference;
+
+  /** turno curso que participa da junção */
+  dayShiftRef: ObjectReference;
+
+  /** período da timeline do curso que está participando da junção */
   sequence: number;
 }
 
