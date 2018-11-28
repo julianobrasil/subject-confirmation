@@ -1,5 +1,5 @@
 import {Component, Input, ViewEncapsulation} from '@angular/core';
-import {TimelineItem} from '../../subject-confirmation.service';
+import {TimelineItem, SagaCourseType, getCourseTypeName} from '../../subject-confirmation.service';
 
 @Component({
   selector: 'app-info-popover',
@@ -18,6 +18,23 @@ export class InfoPopoverComponent {
     this._timelineItem = t;
 
     this._buildPopoverText();
+  }
+
+  /** tipo de curso (conforme definição interna deste projeto SAGA) */
+  _friendlySagaCourseType: string;
+  private _sagaCourseType: SagaCourseType;
+  @Input()
+  get sagaCourseType(): SagaCourseType {
+    return this._sagaCourseType;
+  }
+  set sagaCourseType(sagaCourseType: SagaCourseType) {
+    this._sagaCourseType = sagaCourseType;
+
+    if (!sagaCourseType) {
+      return;
+    }
+
+    this._friendlySagaCourseType = getCourseTypeName(sagaCourseType);
   }
 
   /** texto a ser apresentado quando existem junções */

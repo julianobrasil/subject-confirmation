@@ -5,6 +5,79 @@ import {BehaviorSubject} from 'rxjs';
 import * as moment from 'moment';
 type Moment = moment.Moment;
 
+export enum SagaCourseType {
+  /** GRADUAÇÃO */
+  UNDERGRADUATION = 'UNDERGRADUATION',
+
+  /** PÓS-GRADUAÇÃO */
+  GRADUATION = 'GRADUATION',
+
+  /** FUNDAMENTAL */
+  ELEMENTARY_SCHOOL = 'ELEMENTARY_SCHOOL',
+
+  /** ENSINO MÉDIO */
+  HIGH_SCHOOL = 'HIGH_SCHOOL',
+
+  /** MESTRADO */
+  MASTER_IN_SCIENCE = 'MASTER_IN_SCIENCE',
+
+  /** DOUTORADO */
+  DOCTOR_IN_SCIENCE = 'DOCTOR_IN_SCIENCE',
+
+  /** PhD */
+  PHD = 'PHD',
+}
+
+export const KEY_VALUES: Array<{key: SagaCourseType; value: string}> = [
+  {
+    key: SagaCourseType.DOCTOR_IN_SCIENCE,
+    value: 'Doutorado',
+  },
+
+  {
+    key: SagaCourseType.ELEMENTARY_SCHOOL,
+    value: 'Ensino Fundamental',
+  },
+
+  {
+    key: SagaCourseType.GRADUATION,
+    value: 'Pós-Graduação',
+  },
+
+  {
+    key: SagaCourseType.UNDERGRADUATION,
+    value: 'Graduação',
+  },
+
+  {
+    key: SagaCourseType.HIGH_SCHOOL,
+    value: 'Ensino Médio',
+  },
+
+  {
+    key: SagaCourseType.MASTER_IN_SCIENCE,
+    value: 'Mestrado',
+  },
+
+  {
+    key: SagaCourseType.PHD,
+    value: 'PHD',
+  },
+];
+
+/**
+ * Obtém o nome do curso a partir do código saga
+ */
+export const getCourseTypeName: (key: SagaCourseType) => string = (
+  sagaCourseType: SagaCourseType,
+) => {
+  const index = KEY_VALUES.findIndex(
+    (v: {key: SagaCourseType; value: string}) => v.key === sagaCourseType,
+  );
+
+  return index > -1 ? KEY_VALUES[index].value : '';
+};
+
 export interface User {
   name: string;
   email: string;
@@ -79,6 +152,9 @@ export interface Timeline extends EntityModel {
   /** tipo de curso de courseRef */
   courseTypeRef: ObjectReference;
 
+  /** tipo de curso do SAGA */
+  sagaCourseType: SagaCourseType;
+
   /** turno desta timeline */
   dayShiftRef: ObjectReference;
 
@@ -103,7 +179,7 @@ export interface Timeline extends EntityModel {
  */
 export interface MergedTimeLine {
   /** time line que participa de uma junção */
-  timeLineRef: ObjectReference;
+  timelineRef: ObjectReference;
 
   /** curso que participa da junção */
   courseRef: ObjectReference;

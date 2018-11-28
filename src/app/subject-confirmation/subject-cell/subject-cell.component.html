@@ -2,6 +2,7 @@
 
   <app-info-popover *ngIf="_showInfoBadge"
                     [timelineItem]="timelineItem"
+                    [sagaCourseType]="sagaCourseType"
                     class="saga-syllabus-item-info-badge">
   </app-info-popover>
 
@@ -82,3 +83,7 @@
     </div>
   </div>
 </sat-popover>
+
+<pre>
+  {{timelineItem | json}}
+</pre>

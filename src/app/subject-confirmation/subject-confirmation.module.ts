@@ -11,6 +11,7 @@ import {SubjectCellComponent} from './subject-cell/subject-cell.component';
 import {InfoPopoverComponent} from './subject-cell/info-popover/info-popover.component';
 
 import {SafeHtmlPipe} from '../pipes/safe-html.pipe';
+import {MergedClassFriendlyTextPipe} from './subject-cell/info-popover/pipes/merged-class-friendly-text.pipe';
 
 @NgModule({
   imports: [CommonModule, ReactiveFormsModule, MaterialModule],
@@ -20,7 +21,9 @@ import {SafeHtmlPipe} from '../pipes/safe-html.pipe';
     SubjectConfirmationComponent,
     SubjectConfirmationTimelineComponent,
     InfoPopoverComponent,
+
     SafeHtmlPipe,
+    MergedClassFriendlyTextPipe,
   ],
   exports: [SubjectConfirmationComponent],
   entryComponents: [NewStepTemplateDialogComponent],

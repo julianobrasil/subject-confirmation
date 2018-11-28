@@ -11,7 +11,7 @@ import {
 
 import {SatPopoverAnchor} from '@ncstate/sat-popover';
 
-import {TimelineItem, ObjectReference, MergePlanning} from '../subject-confirmation.service';
+import {TimelineItem, ObjectReference, MergePlanning, SagaCourseType} from '../subject-confirmation.service';
 import {Subject, merge} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 
@@ -63,6 +63,10 @@ export class SubjectCellComponent implements AfterViewInit, OnDestroy {
     this._targetLecturePeriodRef = lecturePeriodRef;
     this._targetLecturePeriodRefLoaded$.next();
   }
+
+  /** tipo de curso (conforme definição interna deste projeto SAGA) */
+  @Input()
+  sagaCourseType: SagaCourseType;
 
   /** emite quando o usuário escolha uma opção do menu de contexto */
   @Output()
@@ -279,8 +283,9 @@ export class SubjectCellComponent implements AfterViewInit, OnDestroy {
     return (
       !!this.timelineItem &&
       !!this.timelineItem.performed &&
-      !!this.timelineItem.performed.mergedTimeLineItems &&
-      !!this.timelineItem.performed.mergedTimeLineItems.length
+      ((!!this.timelineItem.performed.mergedTimeLineItems &&
+        !!this.timelineItem.performed.mergedTimeLineItems.length) ||
+        !!this.timelineItem.performed.equivalentSubject)
     );
   }
 

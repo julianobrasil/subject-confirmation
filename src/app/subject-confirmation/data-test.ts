@@ -5,6 +5,7 @@ import {
   ObjectReference,
   EntityStatus,
   SyllabusInformation,
+  SagaCourseType,
 } from './subject-confirmation.service';
 
 import * as _moment from 'moment';
@@ -63,8 +64,8 @@ const courseTypeRef_GRADUACAO: ObjectReference = {
 };
 
 const dayShiftRef_NOTURNO: ObjectReference = {
-  code: '3',
-  description: 'GRADUAÇÃO',
+  code: '3_ds',
+  description: 'NOTURNO',
 };
 
 export const items_2017_2: TimelineItem[] = [
@@ -125,8 +126,34 @@ export const items_2017_2: TimelineItem[] = [
         code: '2_lp',
         description: 'GRADUAÇÃO::2017::2',
       },
-      mergedTimeLineItems: [],
-      mergingPlanned: MergePlanning.NO_MERGE,
+      mergedTimeLineItems: [
+        {
+          campusRef: campusRef_PERIMETRAL,
+          courseRef: courseRef_CONTROLE,
+          courseTypeRef: courseTypeRef_GRADUACAO,
+          dayShiftRef: dayShiftRef_NOTURNO,
+          sequence: 3,
+          timelineRef: {
+            code: '1_tl',
+            description: '2017-1',
+          },
+        },
+        {
+          campusRef: campusRef_PERIMETRAL,
+          courseRef: {
+            code: '2_ENG_CIVIL',
+            description: 'ENGENHARIA CIVIL',
+          },
+          courseTypeRef: courseTypeRef_GRADUACAO,
+          dayShiftRef: dayShiftRef_NOTURNO,
+          sequence: 4,
+          timelineRef: {
+            code: '15_tl',
+            description: '2016-2',
+          },
+        },
+      ],
+      mergingPlanned: MergePlanning.MERGE_OTHER_COURSES,
       sequence: 1,
     },
     plannedSyllabusItem: {
@@ -191,7 +218,7 @@ export const items_2017_2: TimelineItem[] = [
           courseTypeRef: courseTypeRef_GRADUACAO,
           dayShiftRef: dayShiftRef_NOTURNO,
           sequence: 3,
-          timeLineRef: {
+          timelineRef: {
             code: '1_tl',
             description: '2017-1',
           },
@@ -229,7 +256,7 @@ export const items_2017_2: TimelineItem[] = [
           courseTypeRef: courseTypeRef_GRADUACAO,
           dayShiftRef: dayShiftRef_NOTURNO,
           sequence: 3,
-          timeLineRef: {
+          timelineRef: {
             code: '1_tl',
             description: '2017-1',
           },
@@ -243,13 +270,13 @@ export const items_2017_2: TimelineItem[] = [
           courseTypeRef: courseTypeRef_GRADUACAO,
           dayShiftRef: dayShiftRef_NOTURNO,
           sequence: 4,
-          timeLineRef: {
+          timelineRef: {
             code: '15_tl',
             description: '2016-2',
           },
         },
       ],
-      mergingPlanned: MergePlanning.MERGED_INSIDE_COURSE,
+      mergingPlanned: MergePlanning.MERGE_OTHER_COURSES,
       sequence: 2,
     },
     plannedSyllabusItem: {
@@ -386,12 +413,13 @@ const syllabusInformation: SyllabusInformation = {
   name: 'ECEA20171',
 };
 
-export const _timeLine: Timeline = {
+export const _timeline: Timeline = {
   _id: '1_tl',
   _rev: '1',
   campusRef: campusRef_PERIMETRAL,
   courseRef: courseRef_CONTROLE,
   courseTypeRef: courseTypeRef_GRADUACAO,
+  sagaCourseType: SagaCourseType.UNDERGRADUATION,
   dayShiftRef: dayShiftRef_NOTURNO,
   entityStatus: EntityStatus.ACTIVE,
   label: '2017-2',

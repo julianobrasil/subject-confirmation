@@ -1,6 +1,12 @@
 import {Component, ViewEncapsulation} from '@angular/core';
 
-import {SyllabusItem, TimelineItem, ObjectReference, MergePlanning} from './subject-confirmation.service';
+import {
+  SyllabusItem,
+  TimelineItem,
+  ObjectReference,
+  MergePlanning,
+  Timeline,
+} from './subject-confirmation.service';
 
 import {
   SubjectCellComponentEvent,
@@ -23,10 +29,11 @@ export class SubjectConfirmationComponent {
   //   description: '2018-1',
   // };
 
+  _timeline: Timeline = dataTest._timeline;
 
-  _timelineItemTest: TimelineItem = dataTest.items_2017_2[6];
+  _timelineItemTest: TimelineItem = dataTest.items_2017_2[2];
 
-  _lecturePeriodRefTest: ObjectReference = dataTest.items_2017_2[0].performed.lecturePeriodRef;
+  _lecturePeriodRefTest: ObjectReference = dataTest.items_2017_2[6].performed.lecturePeriodRef;
 
   actionTaken: SubjectCellComponentEvent;
 

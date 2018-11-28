@@ -3,17 +3,33 @@
      class="saga-syllabus-info-badge">I</div>
 
 <sat-popover #popover
-             verticalAlign="below"
              horizontalAlign="center"
-             hasBackdrop>
+             hasBackdrop
+             verticalAlign="below">
   <div class="mat-elevation-z8 saga-info-popover-styling">
     <mat-list dense>
 
+      <!-- informações sobre equivalência ofertada -->
+      <ng-container *ngIf="timelineItem?.performed?.equivalentSubject">
+        <h3 mat-subheader>DISCIPLINA EFETIVAMENTE OFERTADA (EQUIVALENTE)</h3>
+        <mat-list-item>
+          <mat-icon mat-list-icon>switch_camera</mat-icon>
+          <h4 mat-line>
+            <strong>
+              {{timelineItem?.performed?.equivalentSubject?.code}}:
+            </strong>
+            {{timelineItem?.performed?.equivalentSubject?.description}}
+          </h4>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+      </ng-container>
+
+      <!-- informações sobre junções feitas -->
       <ng-container *ngIf="timelineItem?.performed?.mergedTimeLineItems?.length">
         <h3 mat-subheader>JUNÇÕES</h3>
         <mat-list-item *ngFor="let item of timelineItem?.performed?.mergedTimeLineItems">
-          <mat-icon mat-list-icon>folder</mat-icon>
-          <h4 mat-line>{{item?.courseRef?.description}}</h4>
+          <mat-icon mat-list-icon>group_work</mat-icon>
+          <h4 mat-line>{{item | mergedClassFriendlyText: sagaCourseType}}</h4>
         </mat-list-item>
         <mat-divider></mat-divider>
       </ng-container>
