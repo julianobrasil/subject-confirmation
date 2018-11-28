@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 
 import {
   User,
-  Status,
 } from './subject-confirmation/subject-confirmation.service';
 
 import * as moment from 'moment';

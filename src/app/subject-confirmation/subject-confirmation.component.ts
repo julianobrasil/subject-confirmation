@@ -9,6 +9,8 @@ import {
 
 import * as moment from 'moment';
 
+import * as dataTest from './data-test';
+
 @Component({
   selector: 'app-subject-confirmation',
   templateUrl: 'subject-confirmation.component.html',
@@ -16,33 +18,15 @@ import * as moment from 'moment';
   encapsulation: ViewEncapsulation.None,
 })
 export class SubjectConfirmationComponent {
-  _lecturePeriodRefTest: ObjectReference = {
-    code: '12323243243',
-    description: '2018-1',
-  };
+  // _lecturePeriodRefTest: ObjectReference = {
+  //   code: '12323243243',
+  //   description: '2018-1',
+  // };
 
-  _timelineItemTest: TimelineItem = {
-    performedData: {
-      electiveSubject: null,
-      equivalentSubject: null,
-      lecturePeriodRef: {
-        code: '12323243243',
-        description: '2018-1',
-      },
-      mergedTimeLineItems: [],
-      mergingPlanned: MergePlanning.NO_MERGE,
-      sequence: null,
-    },
-    syllabusItem: {
-      creditHours: 300,
-      equivalences: '',
-      preRequirements: '',
-      subjectCode: 'ENG2017200',
-      subjectDescription:
-        'EMPREENDEDORISMO E JOGOS DE EMPRESAS APLICADOS À ENGENHARIA DE CONTROLE E AUTOMAÇÃO',
-      suggestedSequence: 1,
-    },
-  };
+
+  _timelineItemTest: TimelineItem = dataTest.items_2017_2[6];
+
+  _lecturePeriodRefTest: ObjectReference = dataTest.items_2017_2[0].performed.lecturePeriodRef;
 
   actionTaken: SubjectCellComponentEvent;
 

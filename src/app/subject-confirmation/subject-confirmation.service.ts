@@ -1,7 +1,5 @@
 import {Injectable} from '@angular/core';
 
-import {CdkDropList} from '@angular/cdk/drag-drop';
-
 import {BehaviorSubject} from 'rxjs';
 
 import * as moment from 'moment';
@@ -37,6 +35,38 @@ export abstract class EntityModel {
   entityStatus?: EntityStatus;
 }
 
+export interface SyllabusInformation {
+  /** id do Syllabus no banco */
+  objectId: string;
+
+  /** Data de Homologação da Matriz */
+  homologationDate: Moment;
+
+  /** Data de Desativação da Matriz */
+  deactivationDate: Moment;
+
+  /** Carga Horária */
+  creditHours: number;
+
+  /** Carga Horária OBRIGATÓRIA */
+  mandatoryCreditHours: number;
+
+  /** Carga Horária ELETIVA */
+  electiveCreditHours: number;
+
+  /** Créditos */
+  credits: number;
+
+  /** Prazo IDEAL MÁXIMO para conclusão do curso */
+  minCourseDuration: number;
+
+  /** Prazo IDEAL MÍNIMO para conclusão do curso */
+  maxCourseDuration: number;
+
+  /** Código da Matriz Curricular */
+  name: string;
+}
+
 export interface Timeline extends EntityModel {
   label: string;
 
@@ -56,7 +86,7 @@ export interface Timeline extends EntityModel {
   campusRef: ObjectReference;
 
   /** matriz a que este timeline se refere */
-  syllabusRef: ObjectReference;
+  syllabusInformation: SyllabusInformation;
 
   /** indica quais items da timeline tiveram sua ratificação finalizada */
   lecturePeriodConfirmationStatuses: Array<LecturePeriodConfirmationStatus>;
@@ -65,6 +95,12 @@ export interface Timeline extends EntityModel {
   items: TimelineItem[];
 }
 
+/**
+ * Quando uma disciplina é colocada em junção no processo de elaboração do horário (que começa na
+ *     ratificação), é preciso ter informações sobre a timeline das disciplinas que participam da junção
+ *
+ * @export
+ */
 export interface MergedTimeLine {
   /** time line que participa de uma junção */
   timeLineRef: ObjectReference;
@@ -96,38 +132,37 @@ export enum MergePlanning {
   MERGE_OTHER_COURSES = 'MERGE_OTHER_COURSES',
 }
 
+/**
+ * Características da disciplina ofertada
+ *
+ * @export
+ */
+export interface PerformedSubject {
+  /** período do curso (sequência) em que foi realmente executada a disciplina */
+  sequence: number;
+
+  /** período letivo em que a disciplina foi ofertada */
+  lecturePeriodRef: ObjectReference;
+
+  /** junções que podem ocorrer neste curso */
+  mergedTimeLineItems: MergedTimeLine[];
+
+  /** Junção planejada mas ainda não efetivada */
+  mergingPlanned: MergePlanning;
+
+  /** dados de eletiva oferecida */
+  subjectGroupName: string;
+
+  /** disciplina equivalente que foi ofertada em lugar da disciplina original */
+  equivalentSubject: ObjectReference;
+}
+
 export interface TimelineItem {
   /** disciplina a ser ofertada */
-  syllabusItem: SyllabusItem;
+  plannedSyllabusItem: SyllabusItem;
 
-  performedData: {
-    /** período do curso (sequência) em que foi realmente executada a disciplina */
-    sequence: number;
-
-    /** período letivo em que a disciplina foi ofertada */
-    lecturePeriodRef: ObjectReference;
-
-    /** junções que podem ocorrer neste curso */
-    mergedTimeLineItems: MergedTimeLine[];
-
-    /** Junção planejada mas ainda não efetivada */
-    mergingPlanned: MergePlanning;
-
-    /** dados de eletiva oferecida */
-    electiveSubject: {
-      /** nome do grupo (usado no caso de disciplinas eletivas) */
-      subjectGroupName: string;
-
-      /** disciplina eletiva escolhida */
-      subjectRef: ObjectReference;
-
-      /** carga horária da disciplina eletiva que foi oferecida */
-      electiveSubjectCreditHours: number;
-    };
-
-    /** disciplina equivalente que foi ofertada em lugar da disciplina original */
-    equivalentSubject: ObjectReference;
-  };
+  /** dados da disciplina ofertada */
+  performed: PerformedSubject;
 }
 
 export interface SyllabusItem {
@@ -165,9 +200,6 @@ export class Syllabus {
   readonly ELECTIVE: string = 'Eletivas';
   readonly OPTATIVE: string = 'Optativas';
 
-  mapSubjectUse: {[key: string]: string[]} = {};
-  validHours: string[] = [];
-
   /** Data de Homologação da Matriz */
   homologationDate: Moment;
 
@@ -187,10 +219,10 @@ export class Syllabus {
   credits: number;
 
   /** Prazo IDEAL MÁXIMO para conclusão do curso */
-  deadline: number;
+  minCourseDuration: number;
 
   /** Prazo IDEAL MÍNIMO para conclusão do curso */
-  idealTerm: number;
+  maxCourseDuration: number;
 
   /** Código da Matriz Curricular */
   name: string;

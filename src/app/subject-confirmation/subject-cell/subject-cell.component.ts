@@ -6,11 +6,14 @@ import {
   AfterViewInit,
   Output,
   EventEmitter,
+  OnDestroy,
 } from '@angular/core';
 
 import {SatPopoverAnchor} from '@ncstate/sat-popover';
 
 import {TimelineItem, ObjectReference, MergePlanning} from '../subject-confirmation.service';
+import {Subject, merge} from 'rxjs';
+import {debounceTime, takeUntil} from 'rxjs/operators';
 
 export enum SubjectCellComponentActions {
   /** ratifica disciplina sem junção */
@@ -36,8 +39,9 @@ export interface SubjectCellComponentEvent {
   templateUrl: './subject-cell.component.html',
   styleUrls: ['./subject-cell.component.scss'],
 })
-export class SubjectCellComponent implements AfterViewInit {
-  /** item da matriz: provavelmente teremos outro input aqui, relativo à timeline */
+export class SubjectCellComponent implements AfterViewInit, OnDestroy {
+  /** item da timeline */
+  private _timelineItemLoaded$: Subject<void> = new Subject<void>();
   private _timelineItem: TimelineItem;
   @Input()
   get timelineItem(): TimelineItem {
@@ -45,13 +49,20 @@ export class SubjectCellComponent implements AfterViewInit {
   }
   set timelineItem(t: TimelineItem) {
     this._timelineItem = t;
-
-    this._setMerginStatus();
+    this._timelineItemLoaded$.next();
   }
 
   /** período letivo que está sendo alvo da ratificação */
+  private _targetLecturePeriodRefLoaded$: Subject<void> = new Subject<void>();
+  private _targetLecturePeriodRef: ObjectReference;
   @Input()
-  targetLecturePeriodRef: ObjectReference;
+  get targetLecturePeriodRef(): ObjectReference {
+    return this._targetLecturePeriodRef;
+  }
+  set targetLecturePeriodRef(lecturePeriodRef: ObjectReference) {
+    this._targetLecturePeriodRef = lecturePeriodRef;
+    this._targetLecturePeriodRefLoaded$.next();
+  }
 
   /** emite quando o usuário escolha uma opção do menu de contexto */
   @Output()
@@ -73,6 +84,21 @@ export class SubjectCellComponent implements AfterViewInit {
 
   _status: SubjectCellComponentActions;
 
+  /** destrói as assinaturas de observables quando o componente é destruído */
+  private _destroy$: Subject<void> = new Subject<void>();
+
+  constructor() {
+    merge(this._timelineItemLoaded$, this._targetLecturePeriodRefLoaded$)
+      .pipe(
+        debounceTime(300),
+        takeUntil(this._destroy$),
+      )
+      .subscribe((_) => {
+        this._setMerginStatus();
+        this._setWrapperClass(this._timelineItem);
+      });
+  }
+
   ngAfterViewInit(): void {
     const div = this._wrapperDiv.nativeElement as HTMLDivElement;
 
@@ -81,15 +107,30 @@ export class SubjectCellComponent implements AfterViewInit {
     setTimeout(() => (this._wrapperDivWidth = {width: `${boundingRect.width}px`}));
   }
 
+  ngOnDestroy(): void {
+    if (this._destroy$ && !this._destroy$.closed) {
+      this._destroy$.next();
+      this._destroy$.complete();
+    }
+
+    if (this._timelineItemLoaded$ && !this._timelineItemLoaded$.closed) {
+      this._timelineItemLoaded$.complete();
+    }
+
+    if (this._targetLecturePeriodRefLoaded$ && !this._targetLecturePeriodRefLoaded$.closed) {
+      this._targetLecturePeriodRefLoaded$.complete();
+    }
+  }
+
   _openContextMenu(evt: MouseEvent, popoverAnchor: SatPopoverAnchor) {
     evt.preventDefault();
 
     if (
       this.timelineItem &&
-      this.timelineItem.performedData &&
-      !!this.timelineItem.performedData.lecturePeriodRef &&
+      this.timelineItem.performed &&
+      !!this.timelineItem.performed.lecturePeriodRef &&
       !!this.targetLecturePeriodRef &&
-      this.timelineItem.performedData.lecturePeriodRef.code !== this.targetLecturePeriodRef.code
+      this.timelineItem.performed.lecturePeriodRef.code !== this.targetLecturePeriodRef.code
     ) {
       return;
     }
@@ -106,10 +147,10 @@ export class SubjectCellComponent implements AfterViewInit {
   _changeSubjectStatus(action: SubjectCellComponentActions): void {
     const timelineItem: TimelineItem = {...this.timelineItem};
 
-    timelineItem.performedData = timelineItem.performedData
-      ? {...timelineItem.performedData, mergingPlanned: MergePlanning.MERGED_INSIDE_COURSE}
+    timelineItem.performed = timelineItem.performed
+      ? {...timelineItem.performed, mergingPlanned: MergePlanning.MERGED_INSIDE_COURSE}
       : {
-          electiveSubject: null,
+          subjectGroupName: '',
           equivalentSubject: null,
           lecturePeriodRef: this.targetLecturePeriodRef,
           mergedTimeLineItems: [],
@@ -119,25 +160,25 @@ export class SubjectCellComponent implements AfterViewInit {
 
     switch (action) {
       case SubjectCellComponentActions.CANCEL_CONFIRMATION: {
-        timelineItem.performedData = null;
+        timelineItem.performed = null;
         this._cancelConfirmation(timelineItem);
         break;
       }
 
       case SubjectCellComponentActions.CONFIRMATION_MERGED_INSIDE_COURSE: {
-        timelineItem.performedData.mergingPlanned = MergePlanning.MERGED_INSIDE_COURSE;
+        timelineItem.performed.mergingPlanned = MergePlanning.MERGED_INSIDE_COURSE;
         this._confirmMergingInsideCourse(timelineItem);
         break;
       }
 
       case SubjectCellComponentActions.CONFIRMATION_MERGE_OTHER_COURSES: {
-        timelineItem.performedData.mergingPlanned = MergePlanning.MERGE_OTHER_COURSES;
+        timelineItem.performed.mergingPlanned = MergePlanning.MERGE_OTHER_COURSES;
         this._confirmMergeOtherCourses(timelineItem);
         break;
       }
 
       case SubjectCellComponentActions.CONFIRMATION_NO_MERGE: {
-        timelineItem.performedData.mergingPlanned = MergePlanning.NO_MERGE;
+        timelineItem.performed.mergingPlanned = MergePlanning.NO_MERGE;
         this._confirmNoMerging(timelineItem);
         break;
       }
@@ -148,12 +189,7 @@ export class SubjectCellComponent implements AfterViewInit {
    * Ratifica sem nenhuma junção
    */
   _confirmNoMerging(timelineItem: TimelineItem): void {
-    this._wrapperClass = {
-      ...this._wrapperClass,
-      'saga-syllabus-item-container-confirm-no-merge': true,
-      'saga-syllabus-item-container-confirm-merge-inner': false,
-      'saga-syllabus-item-container-confirm-merge-outer': false,
-    };
+    this._setWrapperClass(timelineItem);
 
     this.action.emit({
       actionType: SubjectCellComponentActions.CONFIRMATION_NO_MERGE,
@@ -167,12 +203,7 @@ export class SubjectCellComponent implements AfterViewInit {
    * Ratifica com junção entre cursos
    */
   _confirmMergeOtherCourses(timelineItem: TimelineItem): void {
-    this._wrapperClass = {
-      ...this._wrapperClass,
-      'saga-syllabus-item-container-confirm-no-merge': false,
-      'saga-syllabus-item-container-confirm-merge-inner': false,
-      'saga-syllabus-item-container-confirm-merge-outer': true,
-    };
+    this._setWrapperClass(timelineItem);
 
     this.action.emit({
       actionType: SubjectCellComponentActions.CONFIRMATION_MERGE_OTHER_COURSES,
@@ -186,12 +217,7 @@ export class SubjectCellComponent implements AfterViewInit {
    * Ratifica com junção entre períodos do mesmo curso
    */
   _confirmMergingInsideCourse(timelineItem: TimelineItem): void {
-    this._wrapperClass = {
-      ...this._wrapperClass,
-      'saga-syllabus-item-container-confirm-no-merge': false,
-      'saga-syllabus-item-container-confirm-merge-inner': true,
-      'saga-syllabus-item-container-confirm-merge-outer': false,
-    };
+    this._setWrapperClass(timelineItem);
 
     this.action.emit({
       actionType: SubjectCellComponentActions.CONFIRMATION_MERGED_INSIDE_COURSE,
@@ -207,14 +233,15 @@ export class SubjectCellComponent implements AfterViewInit {
   _cancelConfirmation(timelineItem: TimelineItem): void {
     this._wrapperClass = {
       ...this._wrapperClass,
+      'saga-syllabus-item-container-history': false,
       'saga-syllabus-item-container-confirm-no-merge': false,
       'saga-syllabus-item-container-confirm-merge-inner': false,
       'saga-syllabus-item-container-confirm-merge-outer': false,
     };
 
-    timelineItem.performedData = timelineItem.performedData
-      ? {...timelineItem.performedData, lecturePeriodRef: this.targetLecturePeriodRef}
-      : timelineItem.performedData;
+    timelineItem.performed = timelineItem.performed
+      ? {...timelineItem.performed, lecturePeriodRef: this.targetLecturePeriodRef}
+      : timelineItem.performed;
 
     this.action.emit({
       actionType: SubjectCellComponentActions.CANCEL_CONFIRMATION,
@@ -248,13 +275,13 @@ export class SubjectCellComponent implements AfterViewInit {
    * indica se existe junção (essa informação é preenchida somente no momento em que o horário é
    *     montado, ou seja, no momento da ratificação, nada é apresentado)
    */
-  get _mergedBadgeText(): string {
-    return this.timelineItem &&
-      this.timelineItem.performedData &&
-      this.timelineItem.performedData.mergedTimeLineItems &&
-      this.timelineItem.performedData.mergedTimeLineItems.length
-      ? 'J'
-      : '';
+  get _showInfoBadge(): boolean {
+    return (
+      !!this.timelineItem &&
+      !!this.timelineItem.performed &&
+      !!this.timelineItem.performed.mergedTimeLineItems &&
+      !!this.timelineItem.performed.mergedTimeLineItems.length
+    );
   }
 
   /**
@@ -265,15 +292,15 @@ export class SubjectCellComponent implements AfterViewInit {
   private _setMerginStatus(): void {
     if (
       !this._timelineItem ||
-      !this._timelineItem.performedData ||
-      !this._timelineItem.performedData.lecturePeriodRef ||
+      !this._timelineItem.performed ||
+      !this._timelineItem.performed.lecturePeriodRef ||
       (!!this.targetLecturePeriodRef &&
-        this.targetLecturePeriodRef.code !== this._timelineItem.performedData.lecturePeriodRef.code)
+        this.targetLecturePeriodRef.code !== this._timelineItem.performed.lecturePeriodRef.code)
     ) {
       return;
     }
 
-    switch (this._timelineItem.performedData.mergingPlanned) {
+    switch (this._timelineItem.performed.mergingPlanned) {
       case MergePlanning.MERGED_INSIDE_COURSE: {
         this._status = SubjectCellComponentActions.CONFIRMATION_MERGED_INSIDE_COURSE;
         break;
@@ -288,5 +315,44 @@ export class SubjectCellComponent implements AfterViewInit {
         this._status = SubjectCellComponentActions.CONFIRMATION_NO_MERGE;
       }
     }
+  }
+
+  /**
+   * Colore a aula conforme definição abaixo:
+   *
+   *     - Verde: disciplina no histórico
+   *     - Vermelho: disciplina sem junção
+   *     - Amarelo: disciplina em junção dentro do próprio curso
+   *     - Roxo: disciplina em junção com outros cursos (mesmo que tenha junção dentro do próprio curso também)
+   *
+   */
+  private _setWrapperClass(timelineItem: TimelineItem) {
+    if (
+      !timelineItem ||
+      !timelineItem.performed ||
+      !timelineItem.performed.lecturePeriodRef ||
+      (!!this.targetLecturePeriodRef &&
+        this.targetLecturePeriodRef.code !== timelineItem.performed.lecturePeriodRef.code)
+    ) {
+      this._wrapperClass = {
+        ...this._wrapperClass,
+        'saga-syllabus-item-container-history': true,
+        'saga-syllabus-item-container-confirm-no-merge': false,
+        'saga-syllabus-item-container-confirm-merge-inner': false,
+        'saga-syllabus-item-container-confirm-merge-outer': false,
+      };
+      return;
+    }
+
+    this._wrapperClass = {
+      ...this._wrapperClass,
+      'saga-syllabus-item-container-history': false,
+      'saga-syllabus-item-container-confirm-no-merge':
+        timelineItem.performed.mergingPlanned === MergePlanning.NO_MERGE,
+      'saga-syllabus-item-container-confirm-merge-inner':
+        timelineItem.performed.mergingPlanned === MergePlanning.MERGED_INSIDE_COURSE,
+      'saga-syllabus-item-container-confirm-merge-outer':
+        timelineItem.performed.mergingPlanned === MergePlanning.MERGE_OTHER_COURSES,
+    };
   }
 }

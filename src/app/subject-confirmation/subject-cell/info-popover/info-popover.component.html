@@ -1,0 +1,24 @@
+<div (click)="popover.open()"
+     [satPopoverAnchorFor]="popover"
+     class="saga-syllabus-info-badge">I</div>
+
+<sat-popover #popover
+             verticalAlign="below"
+             horizontalAlign="center"
+             hasBackdrop>
+  <div class="mat-elevation-z8 saga-info-popover-styling">
+    <mat-list dense>
+
+      <ng-container *ngIf="timelineItem?.performed?.mergedTimeLineItems?.length">
+        <h3 mat-subheader>JUNÇÕES</h3>
+        <mat-list-item *ngFor="let item of timelineItem?.performed?.mergedTimeLineItems">
+          <mat-icon mat-list-icon>folder</mat-icon>
+          <h4 mat-line>{{item?.courseRef?.description}}</h4>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+      </ng-container>
+
+    </mat-list>
+  </div>
+
+</sat-popover>

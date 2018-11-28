@@ -4,11 +4,15 @@ import {
   Timeline,
   ObjectReference,
   EntityStatus,
+  SyllabusInformation,
 } from './subject-confirmation.service';
 
+import * as moment from 'moment';
+type Moment = moment.Moment;
+
 export const _timelineItemTestConfirmed: TimelineItem = {
-  performedData: {
-    electiveSubject: null,
+  performed: {
+    subjectGroupName: '',
     equivalentSubject: null,
     lecturePeriodRef: {
       code: '12323243243',
@@ -18,7 +22,7 @@ export const _timelineItemTestConfirmed: TimelineItem = {
     mergingPlanned: MergePlanning.NO_MERGE,
     sequence: null,
   },
-  syllabusItem: {
+  plannedSyllabusItem: {
     creditHours: 300,
     equivalences: '',
     preRequirements: '',
@@ -30,8 +34,8 @@ export const _timelineItemTestConfirmed: TimelineItem = {
 };
 
 export const _timelineItemTestNotConfirmed: TimelineItem = {
-  performedData: null,
-  syllabusItem: {
+  performed: null,
+  plannedSyllabusItem: {
     creditHours: 300,
     equivalences: '',
     preRequirements: '',
@@ -62,11 +66,11 @@ const dayShiftRef_NOTURNO: ObjectReference = {
   description: 'GRADUAÇÃO',
 };
 
-const items_2017_2: TimelineItem[] = [
-  /** disciplina confirmada, no período correto, e no histórico */
+export const items_2017_2: TimelineItem[] = [
+  /** disciplina ratificada no 1o período, pertencente ao período correto, e no histórico */
   {
-    performedData: {
-      electiveSubject: null,
+    performed: {
+      subjectGroupName: '',
       equivalentSubject: null,
       lecturePeriodRef: {
         code: '2_lp',
@@ -76,7 +80,7 @@ const items_2017_2: TimelineItem[] = [
       mergingPlanned: MergePlanning.NO_MERGE,
       sequence: 1,
     },
-    syllabusItem: {
+    plannedSyllabusItem: {
       creditHours: 300,
       equivalences: '',
       preRequirements: '',
@@ -86,10 +90,10 @@ const items_2017_2: TimelineItem[] = [
       suggestedSequence: 1,
     },
   },
-  /** disciplina confirmada, no período errado (antecipada), e no histórico */
+  /** disciplina ratificada no primeiro período, do 2o período (antecipada), e no histórico */
   {
-    performedData: {
-      electiveSubject: null,
+    performed: {
+      subjectGroupName: '',
       equivalentSubject: null,
       lecturePeriodRef: {
         code: '2_lp',
@@ -99,7 +103,7 @@ const items_2017_2: TimelineItem[] = [
       mergingPlanned: MergePlanning.NO_MERGE,
       sequence: 1,
     },
-    syllabusItem: {
+    plannedSyllabusItem: {
       creditHours: 120,
       equivalences: '',
       preRequirements: '',
@@ -108,10 +112,10 @@ const items_2017_2: TimelineItem[] = [
       suggestedSequence: 2,
     },
   },
-  /** disciplina confirmada, no período errado (antecipada), cursada por equivalência, e no histórico */
+  /** disciplina ratificada no 1o período, do 3o período (antecipada), cursada por equivalência */
   {
-    performedData: {
-      electiveSubject: null,
+    performed: {
+      subjectGroupName: '',
       equivalentSubject: {
         code: 'MAT201715',
         description: 'NOVO MATERIAIS PARA ENGENHARIA',
@@ -124,9 +128,9 @@ const items_2017_2: TimelineItem[] = [
       mergingPlanned: MergePlanning.NO_MERGE,
       sequence: 1,
     },
-    syllabusItem: {
+    plannedSyllabusItem: {
       creditHours: 80,
-      equivalences: '',
+      equivalences: '(MAT201715) OU (MAT300002)',
       preRequirements: '',
       subjectCode: 'ENG5175',
       subjectDescription: 'ANTIGO MATERIAIS PARA ENGENHARIA',
@@ -135,8 +139,8 @@ const items_2017_2: TimelineItem[] = [
   },
   /** disciplina não ratificada do módulo 1 */
   {
-    performedData: null,
-    syllabusItem: {
+    performed: null,
+    plannedSyllabusItem: {
       creditHours: 80,
       equivalences: '',
       preRequirements: '',
@@ -147,8 +151,8 @@ const items_2017_2: TimelineItem[] = [
   },
   /** disciplina não ratificada do módulo 1 */
   {
-    performedData: null,
-    syllabusItem: {
+    performed: null,
+    plannedSyllabusItem: {
       creditHours: 40,
       equivalences: '',
       preRequirements: '',
@@ -159,8 +163,8 @@ const items_2017_2: TimelineItem[] = [
   },
   /** disciplina não ratificada do módulo 2 */
   {
-    performedData: null,
-    syllabusItem: {
+    performed: null,
+    plannedSyllabusItem: {
       creditHours: 60,
       equivalences: '',
       preRequirements: '',
@@ -170,10 +174,10 @@ const items_2017_2: TimelineItem[] = [
     },
   },
 
-  /** disciplina ratificada do módulo 2, cursada no período correto, com junção dentro do curso */
+  /** disciplina ratificada 2o período, pertencente ao 2o período, com 3o período do mesmo curso (outra timeline) */
   {
-    performedData: {
-      electiveSubject: null,
+    performed: {
+      subjectGroupName: '',
       equivalentSubject: null,
       lecturePeriodRef: {
         code: '3_lp',
@@ -195,7 +199,7 @@ const items_2017_2: TimelineItem[] = [
       mergingPlanned: MergePlanning.MERGED_INSIDE_COURSE,
       sequence: 2,
     },
-    syllabusItem: {
+    plannedSyllabusItem: {
       creditHours: 60,
       equivalences: '',
       preRequirements: '',
@@ -204,7 +208,182 @@ const items_2017_2: TimelineItem[] = [
       suggestedSequence: 2,
     },
   },
+
+  /**
+   * disciplina ratificada do módulo 2, cursada no período correto, com junção dentro do curso e
+   *      fora do curso
+   */
+  {
+    performed: {
+      subjectGroupName: '',
+      equivalentSubject: null,
+      lecturePeriodRef: {
+        code: '3_lp',
+        description: 'GRADUAÇÃO::2018::1',
+      },
+      mergedTimeLineItems: [
+        {
+          campusRef: campusRef_PERIMETRAL,
+          courseRef: courseRef_CONTROLE,
+          courseTypeRef: courseTypeRef_GRADUACAO,
+          dayShiftRef: dayShiftRef_NOTURNO,
+          sequence: 3,
+          timeLineRef: {
+            code: '1_tl',
+            description: '2017-1',
+          },
+        },
+        {
+          campusRef: campusRef_PERIMETRAL,
+          courseRef: {
+            code: '2_ENG_CIVIL',
+            description: 'ENGENHARIA CIVIL',
+          },
+          courseTypeRef: courseTypeRef_GRADUACAO,
+          dayShiftRef: dayShiftRef_NOTURNO,
+          sequence: 4,
+          timeLineRef: {
+            code: '15_tl',
+            description: '2016-2',
+          },
+        },
+      ],
+      mergingPlanned: MergePlanning.MERGED_INSIDE_COURSE,
+      sequence: 2,
+    },
+    plannedSyllabusItem: {
+      creditHours: 40,
+      equivalences: '',
+      preRequirements: '',
+      subjectCode: 'ENG8001',
+      subjectDescription: 'TERMODINÂMICA',
+      suggestedSequence: 2,
+    },
+  },
+
+  /** disciplina não ratificada do módulo 3 */
+  {
+    performed: null,
+    plannedSyllabusItem: {
+      creditHours: 80,
+      equivalences: '',
+      preRequirements: '',
+      subjectCode: 'CNT2345',
+      subjectDescription: 'FÍSICA',
+      suggestedSequence: 3,
+    },
+  },
+
+  /** disciplina não ratificada do módulo 3 */
+  {
+    performed: null,
+    plannedSyllabusItem: {
+      creditHours: 80,
+      equivalences: '',
+      preRequirements: '',
+      subjectCode: 'CNT1223',
+      subjectDescription: 'QUÍMICA GERAL TECNOLÓGICA',
+      suggestedSequence: 3,
+    },
+  },
+
+  /** disciplina não ratificada do módulo 4 */
+  {
+    performed: null,
+    plannedSyllabusItem: {
+      creditHours: 80,
+      equivalences: '',
+      preRequirements: '',
+      subjectCode: 'MAT5122',
+      subjectDescription: 'EQUAÇÕES DIFERENCIAIS',
+      suggestedSequence: 4,
+    },
+  },
+
+  /** disciplina não ratificada do módulo 4 */
+  {
+    performed: null,
+    plannedSyllabusItem: {
+      creditHours: 60,
+      equivalences: '',
+      preRequirements: '',
+      subjectCode: 'MAT5123',
+      subjectDescription: 'CÁLCULO NUMÉRICO',
+      suggestedSequence: 4,
+    },
+  },
+
+  /** disciplina não ratificada do módulo 5 */
+  {
+    performed: null,
+    plannedSyllabusItem: {
+      creditHours: 40,
+      equivalences: '',
+      preRequirements: '',
+      subjectCode: 'TCC2345',
+      subjectDescription: 'TRABALHO DE CONCLUSÃO DE CURSO I',
+      suggestedSequence: 5,
+    },
+  },
+
+  /** disciplina não ratificada do módulo 5 */
+  {
+    performed: null,
+    plannedSyllabusItem: {
+      creditHours: 80,
+      equivalences: '',
+      preRequirements: '',
+      subjectCode: 'ENG76532',
+      subjectDescription: 'DISCIPLINA IMPORTANTÍSSIMA I',
+      suggestedSequence: 5,
+    },
+  },
+
+  /** disciplina eletiva não ratificada do módulo 5 */
+  {
+    performed: null,
+    plannedSyllabusItem: {
+      creditHours: 80,
+      equivalences: '',
+      preRequirements: '',
+      subjectCode: 'ENG76532',
+      subjectDescription: 'DISCIPLINA IMPORTANTÍSSIMA I',
+      suggestedSequence: 5,
+    },
+  },
 ];
+
+const syllabusInformation: SyllabusInformation = {
+  /** id do Syllabus no banco */
+  objectId: '1_syllabus',
+
+  /** Data de Homologação da Matriz */
+  homologationDate: moment(),
+
+  /** Data de Desativação da Matriz */
+  deactivationDate: moment(),
+
+  /** Carga Horária */
+  creditHours: 3600,
+
+  /** Carga Horária OBRIGATÓRIA */
+  mandatoryCreditHours: 3000,
+
+  /** Carga Horária ELETIVA */
+  electiveCreditHours: 600,
+
+  /** Créditos */
+  credits: 900,
+
+  /** Prazo IDEAL MÁXIMO para conclusão do curso */
+  minCourseDuration: 10,
+
+  /** Prazo IDEAL MÍNIMO para conclusão do curso */
+  maxCourseDuration: 16,
+
+  /** Código da Matriz Curricular */
+  name: 'ECEA20171',
+};
 
 export const _timeLine: Timeline = {
   _id: '1_tl',
@@ -248,9 +427,8 @@ export const _timeLine: Timeline = {
     code: '2_lp',
     description: 'GRADUAÇÃO::2017::2',
   },
-  syllabusRef: {
-    code: '1_syllabus',
-    description: 'ECEA20171',
-  },
+
+  syllabusInformation,
+
   items: items_2017_2,
 };

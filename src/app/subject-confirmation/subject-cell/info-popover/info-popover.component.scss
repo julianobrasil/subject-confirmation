@@ -1,0 +1,31 @@
+.saga-syllabus-info-badge {
+  background-color: black;
+  color: white;
+  width: 12px;
+  height: 12px;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 0.6rem;
+  font-weight: 600;
+  font-family: times;
+  cursor: pointer;
+}
+
+$font-color: rgb(224, 223, 223);
+
+.saga-info-popover-styling {
+  background-color: rgba(0, 0, 0, 0.8);
+  
+
+  .mat-list-item {
+    color: $font-color;
+  }
+
+  .mat-subheader {
+    color: $font-color;
+  }
+
+  .mat-divider {
+    border-color: $font-color;
+  }
+}

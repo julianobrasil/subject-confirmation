@@ -1,19 +1,26 @@
-<div #wrapperDiv
-     #popoverAnchor="satPopoverAnchor"
-     (contextmenu)="_openContextMenu($event, popoverAnchor)"
-     [satPopoverAnchorFor]="popover"
-     [ngClass]="_wrapperClass">
-  <div class="saga-syllabus-item-name">
-    <div>{{ timelineItem?.syllabusItem?.subjectDescription }}</div>
-  </div>
+<div class="saga-syllabus-item-super-container">
 
-  <div class="saga-syllabus-item-code">
-    <div>{{ timelineItem?.syllabusItem?.subjectCode }}</div>
-  </div>
+  <app-info-popover *ngIf="_showInfoBadge"
+                    [timelineItem]="timelineItem"
+                    class="saga-syllabus-item-info-badge">
+  </app-info-popover>
 
-  <div class="saga-syllabus-item-ch">
-    <div [matBadge]="_mergedBadgeText"
-         matBadgeColor="warn">{{ timelineItem?.syllabusItem?.creditHours }}</div>
+  <div #wrapperDiv
+       #popoverAnchor="satPopoverAnchor"
+       (contextmenu)="_openContextMenu($event, popoverAnchor)"
+       [ngClass]="_wrapperClass"
+       [satPopoverAnchorFor]="popover">
+    <div class="saga-syllabus-item-name">
+      <div>{{ timelineItem?.plannedSyllabusItem?.subjectDescription }}</div>
+    </div>
+
+    <div class="saga-syllabus-item-code">
+      <div>{{ timelineItem?.plannedSyllabusItem?.subjectCode }}</div>
+    </div>
+
+    <div class="saga-syllabus-item-ch">
+      <div>{{ timelineItem?.plannedSyllabusItem?.creditHours }}</div>
+    </div>
   </div>
 </div>
 
