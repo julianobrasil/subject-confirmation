@@ -1,4 +1,5 @@
 .saga-syllabus-info-badge {
+  position: relative;
   background-color: black;
   color: white;
   width: 12px;
@@ -9,10 +10,8 @@
   font-weight: 600;
   font-family: times;
   cursor: pointer;
+  z-index: 1000,
 
-  &:hover {
-    transform: scale(2);
-  }
 }
 
 $font-color: rgb(224, 223, 223);
