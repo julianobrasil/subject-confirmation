@@ -1,13 +1,12 @@
 import {Pipe, PipeTransform} from '@angular/core';
+
 import {
   Timeline,
   SagaCourseType,
   TimelineItem,
   LecturePeriodConfirmationStatus,
-  ObjectReference,
   BusinessStatusCode,
-} from '../../subject-confirmation.service';
-import {lecturePeriodRef} from '../../data-test';
+} from '../../definitions';
 
 @Pipe({
   name: 'timelineHeader',
@@ -18,16 +17,7 @@ export class TimelineHeaderPipe implements PipeTransform {
       return '';
     }
 
-    const maxConfirmedSequenceNumber = this._getGreatestConfirmedSequenceNumber(timeline);
-
-    const nextSequenceNumber = timeline.items.some(
-      (value: TimelineItem) =>
-        (!value.performed &&
-          value.plannedSyllabusItem.suggestedSequence > maxConfirmedSequenceNumber) ||
-        (value.performed && value.performed.sequence > maxConfirmedSequenceNumber),
-    )
-      ? maxConfirmedSequenceNumber + 1
-      : -1;
+    const nextSequenceNumber = this.getNextSequenceNumber(timeline);
 
     if (nextSequenceNumber === -1) {
       return '';
@@ -50,10 +40,26 @@ export class TimelineHeaderPipe implements PipeTransform {
   }
 
   /**
+   * Obtém o primeiro número de sequência não confirmado da timeline
+   */
+  getNextSequenceNumber(timeline: Timeline): number {
+    const maxConfirmedSequenceNumber = this._getGreatestConfirmedSequenceNumber(timeline);
+
+    return timeline.items.some(
+      (value: TimelineItem) =>
+        (!value.performed &&
+          value.plannedSyllabusItem.suggestedSequence > maxConfirmedSequenceNumber) ||
+        (value.performed && value.performed.sequence > maxConfirmedSequenceNumber),
+    )
+      ? maxConfirmedSequenceNumber + 1
+      : -1;
+  }
+
+  /**
    * Obtém o maior número de sequência (suggestedSequence) associado a módulos já
    *     finalizados.
    */
-  _getGreatestConfirmedSequenceNumber(timeline: Timeline): number {
+  private _getGreatestConfirmedSequenceNumber(timeline: Timeline): number {
     let maxConfirmedSequenceNumber = null;
     let firstTime = true;
     for (const timelineItem of timeline.items) {
@@ -83,7 +89,7 @@ export class TimelineHeaderPipe implements PipeTransform {
    * verifica se um item da timeline está sendo ratificado no período atual ou se foi ratificado em
    * períodos passados
    */
-  _checkIfTimelineItemIsDone(
+  private _checkIfTimelineItemIsDone(
     timelineItem: TimelineItem,
     lecturePeriodConfirmationStatuses: LecturePeriodConfirmationStatus[],
   ): boolean {

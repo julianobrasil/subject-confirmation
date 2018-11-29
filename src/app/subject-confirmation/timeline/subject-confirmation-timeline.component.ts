@@ -1,7 +1,7 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {Timeline, TimelineItem, ObjectReference} from '../subject-confirmation.service';
 import {SubjectConfirmationTimelineComponentService} from './subject-confirmation-timeline-component.service';
 import {SubjectCellComponentEvent} from '../subject-cell/subject-cell.component';
+import {Timeline, ObjectReference, TimelineItem} from '../definitions';
 
 @Component({
   selector: 'app-subject-confirmation-timeline',

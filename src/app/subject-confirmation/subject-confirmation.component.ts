@@ -1,21 +1,18 @@
 import {Component, ViewEncapsulation} from '@angular/core';
 
 import {
-  SyllabusItem,
-  TimelineItem,
-  ObjectReference,
-  MergePlanning,
-  Timeline,
-} from './subject-confirmation.service';
+  SubjectConfirmationComponentService,
+} from './subject-confirmation-component.service';
 
 import {
   SubjectCellComponentEvent,
-  SubjectCellComponentActions,
 } from './subject-cell/subject-cell.component';
 
-import * as moment from 'moment';
 
 import * as dataTest from './data-test';
+import * as dataTest2 from './data-test2';
+
+import {Timeline, TimelineItem, ObjectReference} from './definitions';
 
 @Component({
   selector: 'app-subject-confirmation',
@@ -24,12 +21,10 @@ import * as dataTest from './data-test';
   encapsulation: ViewEncapsulation.None,
 })
 export class SubjectConfirmationComponent {
-  // _lecturePeriodRefTest: ObjectReference = {
-  //   code: '12323243243',
-  //   description: '2018-1',
-  // };
 
   _targetLecturePeriod = dataTest.lecturePeriodRef;
+
+  _timelines: Timeline[] = [];
 
   _timeline: Timeline = dataTest._timeline;
 
@@ -38,6 +33,12 @@ export class SubjectConfirmationComponent {
   _lecturePeriodRefTest: ObjectReference = dataTest.items_2017_2[6].performed.lecturePeriodRef;
 
   actionTaken: SubjectCellComponentEvent;
+
+  constructor(private _componentService: SubjectConfirmationComponentService) {
+    const tls: Timeline[] = [dataTest._timeline, dataTest2._timeline];
+
+    this._timelines = this._componentService.sortTimelines(tls);
+  }
 
   _actionHandler(evt: SubjectCellComponentEvent) {
     this.actionTaken = evt;

@@ -1,6 +1,7 @@
-import { Component, Input, ViewEncapsulation } from '@angular/core';
-import { TimelineItem, SagaCourseType, getCourseTypeName } from '../../subject-confirmation.service';
-import { trigger, state, style, transition, animate } from '@angular/animations';
+import {Component, Input, ViewEncapsulation} from '@angular/core';
+import {trigger, state, style, transition, animate} from '@angular/animations';
+
+import {TimelineItem, SagaCourseType, getCourseTypeName} from '../../definitions';
 
 @Component({
   selector: 'app-info-popover',
@@ -9,11 +10,11 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
   encapsulation: ViewEncapsulation.None,
   animations: [
     trigger('magnify', [
-      state('true', style({ transform: 'scale(2)' })),
-      state('false', style({ transform: 'scale(1)' })),
+      state('true', style({transform: 'scale(2)'})),
+      state('false', style({transform: 'scale(1)'})),
       transition('false <=> true', animate(150)),
     ]),
-  ]
+  ],
 })
 export class InfoPopoverComponent {
   /** item da timeline */

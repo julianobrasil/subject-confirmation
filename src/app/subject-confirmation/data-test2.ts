@@ -1,83 +1,34 @@
 import {
   TimelineItem,
   MergePlanning,
-  ObjectReference,
   SyllabusInformation,
+  ObjectReference,
   Timeline,
   SagaCourseType,
   EntityStatus,
   BusinessStatusCode,
 } from './definitions';
 
+import {
+  campusRef_PERIMETRAL,
+  courseRef_CONTROLE,
+  courseTypeRef_GRADUACAO,
+  dayShiftRef_NOTURNO,
+} from './data-test';
+
 import * as _moment from 'moment';
 import {default as _rollupMoment} from 'moment';
 const moment = _rollupMoment || _moment;
 
-export const _timelineItemTestConfirmed: TimelineItem = {
-  performed: {
-    subjectGroupName: '',
-    equivalentSubject: null,
-    lecturePeriodRef: {
-      code: '12323243243',
-      description: '2018-1',
-    },
-    mergedTimeLineItems: [],
-    mergingPlanned: MergePlanning.NO_MERGE,
-    sequence: null,
-  },
-  plannedSyllabusItem: {
-    creditHours: 300,
-    equivalences: '',
-    preRequirements: '',
-    subjectCode: 'ENG2017200',
-    subjectDescription:
-      'EMPREENDEDORISMO E JOGOS DE EMPRESAS APLICADOS À ENGENHARIA DE CONTROLE E AUTOMAÇÃO',
-    suggestedSequence: 1,
-  },
-};
-
-export const _timelineItemTestNotConfirmed: TimelineItem = {
-  performed: null,
-  plannedSyllabusItem: {
-    creditHours: 300,
-    equivalences: '',
-    preRequirements: '',
-    subjectCode: 'ENG2017200',
-    subjectDescription:
-      'EMPREENDEDORISMO E JOGOS DE EMPRESAS APLICADOS À ENGENHARIA DE CONTROLE E AUTOMAÇÃO',
-    suggestedSequence: 1,
-  },
-};
-
-export const campusRef_PERIMETRAL: ObjectReference = {
-  code: '1',
-  description: 'GOIÂNIA:PERIMETRAL',
-};
-
-export const courseRef_CONTROLE: ObjectReference = {
-  code: '2',
-  description: 'ENGENHARIA DE CONTROLE E AUTOMAÇÃO',
-};
-
-export const courseTypeRef_GRADUACAO: ObjectReference = {
-  code: '3',
-  description: 'GRADUAÇÃO',
-};
-
-export const dayShiftRef_NOTURNO: ObjectReference = {
-  code: '3_ds',
-  description: 'NOTURNO',
-};
-
-const items_2017_1_primeiro_per: TimelineItem[] = [
+const items_2017_2_primeiro_per: TimelineItem[] = [
   /** disciplina ratificada no 1o período, pertencente ao período correto, e no histórico */
   {
     performed: {
       subjectGroupName: '',
       equivalentSubject: null,
       lecturePeriodRef: {
-        code: '1_lp',
-        description: 'GRADUAÇÃO::2017::1',
+        code: '2_lp',
+        description: 'GRADUAÇÃO::2017::2',
       },
       mergedTimeLineItems: [],
       mergingPlanned: MergePlanning.NO_MERGE,
@@ -104,7 +55,7 @@ const items_2017_1_primeiro_per: TimelineItem[] = [
       },
       mergedTimeLineItems: [],
       mergingPlanned: MergePlanning.NO_MERGE,
-      sequence: 3,
+      sequence: 2,
     },
     plannedSyllabusItem: {
       creditHours: 80,
@@ -129,15 +80,15 @@ const items_2017_1_primeiro_per: TimelineItem[] = [
   },
 ];
 
-const items_2017_1_segundo_per: TimelineItem[] = [
-  /** disciplina ratificada no primeiro período, do 2o período (antecipada), e no histórico */
+const items_2017_2_segundo_per: TimelineItem[] = [
+  /** disciplina ratificada no primeiro período, do 2o período (antecipada) */
   {
     performed: {
       subjectGroupName: '',
       equivalentSubject: null,
       lecturePeriodRef: {
-        code: '2_lp',
-        description: 'GRADUAÇÃO::2017::2',
+        code: '3_lp',
+        description: 'GRADUAÇÃO::2018::1',
       },
       mergedTimeLineItems: [],
       mergingPlanned: MergePlanning.NO_MERGE,
@@ -163,7 +114,7 @@ const items_2017_1_segundo_per: TimelineItem[] = [
       },
       mergedTimeLineItems: [],
       mergingPlanned: MergePlanning.MERGED_INSIDE_COURSE,
-      sequence: 3,
+      sequence: 2,
     },
     plannedSyllabusItem: {
       creditHours: 40,
@@ -192,13 +143,13 @@ const items_2017_1_segundo_per: TimelineItem[] = [
           dayShiftRef: dayShiftRef_NOTURNO,
           sequence: 3,
           timelineRef: {
-            code: '2_tl',
-            description: '2017-2',
+            code: '1_tl',
+            description: '2017-1',
           },
         },
       ],
       mergingPlanned: MergePlanning.MERGED_INSIDE_COURSE,
-      sequence: 2,
+      sequence: 1,
     },
     plannedSyllabusItem: {
       creditHours: 60,
@@ -219,37 +170,11 @@ const items_2017_1_segundo_per: TimelineItem[] = [
       subjectGroupName: '',
       equivalentSubject: null,
       lecturePeriodRef: {
-        code: '1_lp',
-        description: 'GRADUAÇÃO::2017::1',
+        code: '3_lp',
+        description: 'GRADUAÇÃO::2018::1',
       },
-      mergedTimeLineItems: [
-        {
-          campusRef: campusRef_PERIMETRAL,
-          courseRef: courseRef_CONTROLE,
-          courseTypeRef: courseTypeRef_GRADUACAO,
-          dayShiftRef: dayShiftRef_NOTURNO,
-          sequence: 3,
-          timelineRef: {
-            code: '1_tl',
-            description: '2017-1',
-          },
-        },
-        {
-          campusRef: campusRef_PERIMETRAL,
-          courseRef: {
-            code: '2_ENG_CIVIL',
-            description: 'ENGENHARIA CIVIL',
-          },
-          courseTypeRef: courseTypeRef_GRADUACAO,
-          dayShiftRef: dayShiftRef_NOTURNO,
-          sequence: 4,
-          timelineRef: {
-            code: '15_tl',
-            description: '2016-2',
-          },
-        },
-      ],
-      mergingPlanned: MergePlanning.MERGED_OTHER_COURSES,
+      mergedTimeLineItems: [],
+      mergingPlanned: MergePlanning.NO_MERGE,
       sequence: 2,
     },
     plannedSyllabusItem: {
@@ -263,48 +188,19 @@ const items_2017_1_segundo_per: TimelineItem[] = [
   },
 ];
 
-const items_2017_1_terceiro_per: TimelineItem[] = [
-  /** disciplina ratificada no 1o período, do 3o período (antecipada), cursada por equivalência */
+const items_2017_2_terceiro_per: TimelineItem[] = [
+  /** disciplina ratificada no 1o período, do 3o período (antecipada)*/
   {
     performed: {
       subjectGroupName: '',
-      equivalentSubject: {
-        code: 'MAT201715',
-        description: 'NOVO MATERIAIS PARA ENGENHARIA',
-      },
+      equivalentSubject: null,
       lecturePeriodRef: {
-        code: '1_lp',
-        description: 'GRADUAÇÃO::2017::1',
+        code: '3_lp',
+        description: 'GRADUAÇÃO::2018::1',
       },
-      mergedTimeLineItems: [
-        {
-          campusRef: campusRef_PERIMETRAL,
-          courseRef: courseRef_CONTROLE,
-          courseTypeRef: courseTypeRef_GRADUACAO,
-          dayShiftRef: dayShiftRef_NOTURNO,
-          sequence: 3,
-          timelineRef: {
-            code: '1_tl',
-            description: '2017-1',
-          },
-        },
-        {
-          campusRef: campusRef_PERIMETRAL,
-          courseRef: {
-            code: '2_ENG_CIVIL',
-            description: 'ENGENHARIA CIVIL',
-          },
-          courseTypeRef: courseTypeRef_GRADUACAO,
-          dayShiftRef: dayShiftRef_NOTURNO,
-          sequence: 4,
-          timelineRef: {
-            code: '15_tl',
-            description: '2016-2',
-          },
-        },
-      ],
+      mergedTimeLineItems: [],
       mergingPlanned: MergePlanning.MERGED_OTHER_COURSES,
-      sequence: 1,
+      sequence: 2,
     },
     plannedSyllabusItem: {
       creditHours: 80,
@@ -318,17 +214,7 @@ const items_2017_1_terceiro_per: TimelineItem[] = [
 
   /** disciplina não ratificada do módulo 3 */
   {
-    performed: {
-      subjectGroupName: '',
-      equivalentSubject: null,
-      lecturePeriodRef: {
-        code: '3_lp',
-        description: 'GRADUAÇÃO::2018::1',
-      },
-      mergedTimeLineItems: [],
-      mergingPlanned: MergePlanning.MERGED_INSIDE_COURSE,
-      sequence: 3,
-    },
+    performed: null,
     plannedSyllabusItem: {
       creditHours: 80,
       equivalences: '',
@@ -353,20 +239,10 @@ const items_2017_1_terceiro_per: TimelineItem[] = [
   },
 ];
 
-const items_2017_1_quarto_per: TimelineItem[] = [
+const items_2017_2_quarto_per: TimelineItem[] = [
   /** disciplina não ratificada do módulo 4 */
   {
-    performed: {
-      subjectGroupName: '',
-      equivalentSubject: null,
-      lecturePeriodRef: {
-        code: '3_lp',
-        description: 'GRADUAÇÃO::2018::1',
-      },
-      mergedTimeLineItems: [],
-      mergingPlanned: MergePlanning.MERGED_OTHER_COURSES,
-      sequence: 3,
-    },
+    performed: null,
     plannedSyllabusItem: {
       creditHours: 80,
       equivalences: '',
@@ -391,7 +267,7 @@ const items_2017_1_quarto_per: TimelineItem[] = [
   },
 ];
 
-const items_2017_1_quinto_per: TimelineItem[] = [
+const items_2017_2_quinto_per: TimelineItem[] = [
   /** disciplina não ratificada do módulo 5 */
   {
     performed: null,
@@ -433,11 +309,11 @@ const items_2017_1_quinto_per: TimelineItem[] = [
 ];
 
 export const items_2017_2: TimelineItem[] = [
-  ...items_2017_1_primeiro_per,
-  ...items_2017_1_segundo_per,
-  ...items_2017_1_terceiro_per,
-  ...items_2017_1_quarto_per,
-  ...items_2017_1_quinto_per,
+  ...items_2017_2_primeiro_per,
+  ...items_2017_2_segundo_per,
+  ...items_2017_2_terceiro_per,
+  ...items_2017_2_quarto_per,
+  ...items_2017_2_quinto_per,
 ];
 
 const syllabusInformation: SyllabusInformation = {
@@ -478,7 +354,7 @@ export const lecturePeriodRef: ObjectReference = {
 };
 
 export const _timeline: Timeline = {
-  _id: '1_tl',
+  _id: '2_tl',
   _rev: '1',
   campusRef: campusRef_PERIMETRAL,
   courseRef: courseRef_CONTROLE,
@@ -486,22 +362,12 @@ export const _timeline: Timeline = {
   sagaCourseType: SagaCourseType.UNDERGRADUATION,
   dayShiftRef: dayShiftRef_NOTURNO,
   entityStatus: EntityStatus.ACTIVE,
-  label: '2017-1',
+  label: '2017-2',
   lecturePeriodConfirmationStatuses: [
     {
       lecturePeriodRef: {
         code: '2_lp',
         description: 'GRADUAÇÃO::2017::2',
-      },
-      businessStatus: {
-        code: BusinessStatusCode.SUBJECT_CONFIRMATION_DONE,
-        name: 'Ratificação finalizada',
-      },
-    },
-    {
-      lecturePeriodRef: {
-        code: '1_lp',
-        description: 'GRADUAÇÃO::2017::1',
       },
       businessStatus: {
         code: BusinessStatusCode.SUBJECT_CONFIRMATION_DONE,
@@ -520,8 +386,8 @@ export const _timeline: Timeline = {
     },
   ],
   startLecturePeriodRef: {
-    code: '1_lp',
-    description: 'GRADUAÇÃO::2017::1',
+    code: '2_lp',
+    description: 'GRADUAÇÃO::2017::2',
   },
 
   syllabusInformation,

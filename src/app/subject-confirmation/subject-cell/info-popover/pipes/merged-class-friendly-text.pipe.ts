@@ -1,7 +1,6 @@
 import {Pipe, PipeTransform} from '@angular/core';
 
-import {MergedTimeLine, SagaCourseType} from '../../../subject-confirmation.service';
-
+import {MergedTimeLine, SagaCourseType} from 'src/app/subject-confirmation/definitions';
 
 @Pipe({
   name: 'mergedClassFriendlyText',

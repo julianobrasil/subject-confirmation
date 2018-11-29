@@ -16,7 +16,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { SubjectConfirmationService } from '../subject-confirmation.service';
+import { SubjectConfirmationComponentService } from '../subject-confirmation-component.service';
 
 import * as moment from 'moment';
 type Moment = moment.Moment;
@@ -42,7 +42,7 @@ export class NewStepTemplateDialogComponent implements OnDestroy {
     private _dialogRef: MatDialogRef<NewStepTemplateDialogComponent>,
     private _fb: FormBuilder,
     private _breakpointObserver: BreakpointObserver,
-    private _componentService: SubjectConfirmationService,
+    private _componentService: SubjectConfirmationComponentService,
   ) {
     this._form = this._fb.group({
       name: [null, Validators.required],

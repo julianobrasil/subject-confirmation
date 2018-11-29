@@ -1,8 +1,7 @@
-import {Injectable} from '@angular/core';
-
 import {BehaviorSubject} from 'rxjs';
 
 import * as moment from 'moment';
+import {TimelineHeaderPipe} from './timeline/pipes/timeline-header.pipe';
 type Moment = moment.Moment;
 
 export enum BusinessStatusCode {
@@ -321,8 +320,3 @@ export class Syllabus {
   /** Cursos que utilizam esta Matriz **/
   courseRefs: Set<ObjectReference>;
 }
-
-@Injectable({
-  providedIn: 'root',
-})
-export class SubjectConfirmationService {}

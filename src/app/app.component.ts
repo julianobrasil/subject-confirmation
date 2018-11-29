@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 
-import {
-  User,
-} from './subject-confirmation/subject-confirmation.service';
+
+import {User} from './subject-confirmation/definitions';
 
 import * as moment from 'moment';
 type Moment = moment.Moment;

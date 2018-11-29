@@ -1,5 +1,6 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import {Timeline, SagaCourseType} from '../../subject-confirmation.service';
+
+import {Timeline, SagaCourseType} from '../../definitions';
 
 @Pipe({
   name: 'moduleHeader',
