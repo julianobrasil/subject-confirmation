@@ -9,13 +9,16 @@
   font-weight: 600;
   font-family: times;
   cursor: pointer;
+
+  &:hover {
+    transform: scale(2);
+  }
 }
 
 $font-color: rgb(224, 223, 223);
 
 .saga-info-popover-styling {
-  background-color: rgba(0, 0, 0, 0.8);
-  
+  background-color: rgba(0, 0, 0, 0.85);
 
   .mat-list-item {
     color: $font-color;

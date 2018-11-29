@@ -1,0 +1,15 @@
+<div class="saga-timeline-container">
+  <div *ngFor="let column of _timeLineItems">
+    <!-- <div *ngFor="let cell of column"></div> -->
+      <!-- <pre>
+          {{column | json}}
+      </pre> -->
+    <app-subject-cell *ngFor="let cell of column"
+                      (action)="_actionHandler($event)"
+                      [sagaCourseType]="timeline.sagaCourseType"
+                      [targetLecturePeriodRef]="targetLecturePeriodRef"
+                      [timelineItem]="cell">
+    </app-subject-cell>
+  </div>
+</div>
+

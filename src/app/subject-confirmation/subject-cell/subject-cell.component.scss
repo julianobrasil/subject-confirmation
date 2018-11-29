@@ -11,13 +11,16 @@ $saga-syllabus-border-color: rgba(0, 0, 0, 0.87);
   top: 3px;
 }
 
+$name-cell-width: 141px;
+$code-cell-width: 80px;
+$ch-cell-width: 50px;
+
 .saga-syllabus-item-container {
   display: flex;
   flex-direction: row;
   justify-content: left;
   align-content: center;
   border: 1px solid $saga-syllabus-border-color;
-  max-width: 280px;
   min-height: 60px;
   max-height: 60px;
   font-size: 0.625rem;
@@ -34,16 +37,20 @@ $saga-syllabus-border-color: rgba(0, 0, 0, 0.87);
   .saga-syllabus-item-name {
     border-right: 1px solid $saga-syllabus-border-color;
     padding: 5px 10px 5px 0px;
+    max-width: $name-cell-width;
+    min-width: $name-cell-width;
   }
 
   .saga-syllabus-item-code {
     border-right: 1px solid $saga-syllabus-border-color;
-    width: 80px;
+    min-width: $code-cell-width;
+    max-width: $code-cell-width;
     padding: 5px 2px 5px 2px;
   }
 
   .saga-syllabus-item-ch {
-    width: 50px;
+    min-width: $ch-cell-width;
+    max-width: $ch-cell-width;
     padding: 5px 2px 5px 2px;
   }
 }

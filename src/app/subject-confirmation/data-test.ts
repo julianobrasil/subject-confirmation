@@ -9,7 +9,7 @@ import {
 } from './subject-confirmation.service';
 
 import * as _moment from 'moment';
-import {default as _rollupMoment} from 'moment';
+import { default as _rollupMoment } from 'moment';
 const moment = _rollupMoment || _moment;
 
 export const _timelineItemTestConfirmed: TimelineItem = {
@@ -411,6 +411,11 @@ const syllabusInformation: SyllabusInformation = {
 
   /** Código da Matriz Curricular */
   name: 'ECEA20171',
+};
+
+export const lecturePeriodRef: ObjectReference = {
+  code: '3_lp',
+  description: 'GRADUAÇÃO::2018::1',
 };
 
 export const _timeline: Timeline = {

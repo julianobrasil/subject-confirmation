@@ -1,4 +1,7 @@
 <div (click)="popover.open()"
+     (mouseenter)="_isHover = true"
+     (mouseleave)="_isHover = false"
+     [@magnify]="_isHover"
      [satPopoverAnchorFor]="popover"
      class="saga-syllabus-info-badge">I</div>
 

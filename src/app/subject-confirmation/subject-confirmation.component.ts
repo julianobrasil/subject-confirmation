@@ -29,6 +29,8 @@ export class SubjectConfirmationComponent {
   //   description: '2018-1',
   // };
 
+  _targetLecturePeriod = dataTest.lecturePeriodRef;
+
   _timeline: Timeline = dataTest._timeline;
 
   _timelineItemTest: TimelineItem = dataTest.items_2017_2[2];

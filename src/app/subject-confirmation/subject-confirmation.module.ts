@@ -12,6 +12,7 @@ import {InfoPopoverComponent} from './subject-cell/info-popover/info-popover.com
 
 import {SafeHtmlPipe} from '../pipes/safe-html.pipe';
 import {MergedClassFriendlyTextPipe} from './subject-cell/info-popover/pipes/merged-class-friendly-text.pipe';
+import { TimelineComponent } from './timeline/timeline.component';
 
 @NgModule({
   imports: [CommonModule, ReactiveFormsModule, MaterialModule],
@@ -24,6 +25,7 @@ import {MergedClassFriendlyTextPipe} from './subject-cell/info-popover/pipes/mer
 
     SafeHtmlPipe,
     MergedClassFriendlyTextPipe,
+    TimelineComponent,
   ],
   exports: [SubjectConfirmationComponent],
   entryComponents: [NewStepTemplateDialogComponent],

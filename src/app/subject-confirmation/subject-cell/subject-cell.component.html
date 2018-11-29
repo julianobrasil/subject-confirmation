@@ -44,12 +44,7 @@
       </button>
 
       <button *ngIf="_showMergeInsideCourseButton"
-              (click)="
-          _confirmSubject(
-            popoverAnchor,
-            _ACTIONS.CONFIRMATION_MERGED_INSIDE_COURSE
-          )
-        "
+              (click)="_confirmSubject(popoverAnchor,_ACTIONS.CONFIRMATION_MERGED_INSIDE_COURSE)"
               mat-button
               type="button">
         <mat-icon>done_all</mat-icon>
@@ -83,7 +78,3 @@
     </div>
   </div>
 </sat-popover>
-
-<pre>
-  {{timelineItem | json}}
-</pre>

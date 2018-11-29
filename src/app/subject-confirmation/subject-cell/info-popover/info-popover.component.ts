@@ -1,11 +1,19 @@
-import {Component, Input, ViewEncapsulation} from '@angular/core';
-import {TimelineItem, SagaCourseType, getCourseTypeName} from '../../subject-confirmation.service';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { TimelineItem, SagaCourseType, getCourseTypeName } from '../../subject-confirmation.service';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-info-popover',
   templateUrl: './info-popover.component.html',
   styleUrls: ['./info-popover.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  animations: [
+    trigger('magnify', [
+      state('true', style({ transform: 'scale(2)' })),
+      state('false', style({ transform: 'scale(1)' })),
+      transition('false <=> true', animate(150)),
+    ]),
+  ]
 })
 export class InfoPopoverComponent {
   /** item da timeline */
@@ -16,8 +24,6 @@ export class InfoPopoverComponent {
   }
   set timelineItem(t: TimelineItem) {
     this._timelineItem = t;
-
-    this._buildPopoverText();
   }
 
   /** tipo de curso (conforme definição interna deste projeto SAGA) */
@@ -37,22 +43,5 @@ export class InfoPopoverComponent {
     this._friendlySagaCourseType = getCourseTypeName(sagaCourseType);
   }
 
-  /** texto a ser apresentado quando existem junções */
-  _mergedItemsText: string;
-
-  _buildPopoverText(): void {
-    this._mergedItemsText = '';
-
-    if (!this._timelineItem || !this._timelineItem.performed) {
-      return;
-    }
-
-    this._mergedItemsText = '';
-    if (
-      this._timelineItem.performed.mergedTimeLineItems &&
-      this._timelineItem.performed.mergedTimeLineItems.length
-    ) {
-      this._mergedItemsText += `<strong>Just a test</strong>`;
-    }
-  }
+  _isHover = false;
 }

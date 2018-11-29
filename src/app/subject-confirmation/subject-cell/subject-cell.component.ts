@@ -9,11 +9,11 @@ import {
   OnDestroy,
 } from '@angular/core';
 
-import {SatPopoverAnchor} from '@ncstate/sat-popover';
+import { SatPopoverAnchor } from '@ncstate/sat-popover';
 
-import {TimelineItem, ObjectReference, MergePlanning, SagaCourseType} from '../subject-confirmation.service';
-import {Subject, merge} from 'rxjs';
-import {debounceTime, takeUntil} from 'rxjs/operators';
+import { TimelineItem, ObjectReference, MergePlanning, SagaCourseType } from '../subject-confirmation.service';
+import { Subject, merge } from 'rxjs';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 
 export enum SubjectCellComponentActions {
   /** ratifica disciplina sem junção */
@@ -82,7 +82,7 @@ export class SubjectCellComponent implements AfterViewInit, OnDestroy {
   _ACTIONS = SubjectCellComponentActions;
 
   /** classe que envolve toda a div de celula */
-  _wrapperClass: {[key: string]: boolean} = {
+  _wrapperClass: { [key: string]: boolean } = {
     'saga-syllabus-item-container': true,
   };
 
@@ -108,7 +108,7 @@ export class SubjectCellComponent implements AfterViewInit, OnDestroy {
 
     const boundingRect: ClientRect | DOMRect = div.getBoundingClientRect();
 
-    setTimeout(() => (this._wrapperDivWidth = {width: `${boundingRect.width}px`}));
+    setTimeout(() => (this._wrapperDivWidth = { width: `${boundingRect.width}px` }));
   }
 
   ngOnDestroy(): void {
@@ -149,18 +149,18 @@ export class SubjectCellComponent implements AfterViewInit, OnDestroy {
   }
 
   _changeSubjectStatus(action: SubjectCellComponentActions): void {
-    const timelineItem: TimelineItem = {...this.timelineItem};
+    const timelineItem: TimelineItem = { ...this.timelineItem };
 
     timelineItem.performed = timelineItem.performed
-      ? {...timelineItem.performed, mergingPlanned: MergePlanning.MERGED_INSIDE_COURSE}
+      ? { ...timelineItem.performed, mergingPlanned: MergePlanning.MERGED_INSIDE_COURSE }
       : {
-          subjectGroupName: '',
-          equivalentSubject: null,
-          lecturePeriodRef: this.targetLecturePeriodRef,
-          mergedTimeLineItems: [],
-          mergingPlanned: null,
-          sequence: null, // TODO(@julianobrasil): é preciso inferir o período/módulo do curso aqui
-        };
+        subjectGroupName: '',
+        equivalentSubject: null,
+        lecturePeriodRef: this.targetLecturePeriodRef,
+        mergedTimeLineItems: [],
+        mergingPlanned: null,
+        sequence: null, // TODO(@julianobrasil): é preciso inferir o período/módulo do curso aqui
+      };
 
     switch (action) {
       case SubjectCellComponentActions.CANCEL_CONFIRMATION: {
@@ -244,7 +244,7 @@ export class SubjectCellComponent implements AfterViewInit, OnDestroy {
     };
 
     timelineItem.performed = timelineItem.performed
-      ? {...timelineItem.performed, lecturePeriodRef: this.targetLecturePeriodRef}
+      ? { ...timelineItem.performed, lecturePeriodRef: this.targetLecturePeriodRef }
       : timelineItem.performed;
 
     this.action.emit({
@@ -334,10 +334,24 @@ export class SubjectCellComponent implements AfterViewInit, OnDestroy {
   private _setWrapperClass(timelineItem: TimelineItem) {
     if (
       !timelineItem ||
-      !timelineItem.performed ||
-      !timelineItem.performed.lecturePeriodRef ||
-      (!!this.targetLecturePeriodRef &&
-        this.targetLecturePeriodRef.code !== timelineItem.performed.lecturePeriodRef.code)
+      !timelineItem.performed
+    ) {
+      this._wrapperClass = {
+        ...this._wrapperClass,
+        'saga-syllabus-item-container-history': false,
+        'saga-syllabus-item-container-confirm-no-merge': false,
+        'saga-syllabus-item-container-confirm-merge-inner': false,
+        'saga-syllabus-item-container-confirm-merge-outer': false,
+      };
+      return;
+    }
+
+    if (
+      !!timelineItem &&
+      !!timelineItem.performed &&
+      !!timelineItem.performed.lecturePeriodRef &&
+      !!this.targetLecturePeriodRef &&
+      this.targetLecturePeriodRef.code !== timelineItem.performed.lecturePeriodRef.code
     ) {
       this._wrapperClass = {
         ...this._wrapperClass,
