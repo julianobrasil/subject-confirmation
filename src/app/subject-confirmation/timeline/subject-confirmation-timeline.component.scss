@@ -1,0 +1,24 @@
+.saga-timeline-container {
+  display: flex;
+  flex-direction: row;
+}
+
+$border-width: 1px;
+
+.saga-timeline-column-header {
+  text-align: center;
+  border: $border-width solid black;
+  margin-left: -$border-width/2;
+  margin-right: -$border-width/2;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.saga-timeline-identification-header {
+  text-align: left;
+  background-color: black;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  padding-left: 10px;
+}

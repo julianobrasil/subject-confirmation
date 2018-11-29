@@ -1,13 +1,11 @@
-<app-subject-confirmation-timeline></app-subject-confirmation-timeline>
+<app-subject-confirmation-timeline [timeline]="_timeline"
+                                   [targetLecturePeriodRef]="_targetLecturePeriod">
+</app-subject-confirmation-timeline>
 
-<app-timeline [timeline]="_timeline"
-              [targetLecturePeriodRef]="_targetLecturePeriod">
-</app-timeline>
-
-<app-subject-cell (action)="_actionHandler($event)"
+<!-- <app-subject-cell (action)="_actionHandler($event)"
                   [sagaCourseType]="_timeline.sagaCourseType"
                   [targetLecturePeriodRef]="_lecturePeriodRefTest"
                   [timelineItem]="_timelineItemTest">
-</app-subject-cell>
+</app-subject-cell> -->
 
 <br>

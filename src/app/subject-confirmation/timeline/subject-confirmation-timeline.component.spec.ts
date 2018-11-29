@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { SubjectConfirmationTimelineComponent } from './subject-confirmation-timeline.component';
+import {SubjectConfirmationTimelineComponent} from './subject-confirmation-timeline.component';
 
 describe('SubjectConfirmationTimelineComponent', () => {
   let component: SubjectConfirmationTimelineComponent;
@@ -8,9 +8,8 @@ describe('SubjectConfirmationTimelineComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SubjectConfirmationTimelineComponent ]
-    })
-    .compileComponents();
+      declarations: [SubjectConfirmationTimelineComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

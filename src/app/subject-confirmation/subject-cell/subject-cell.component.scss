@@ -1,4 +1,9 @@
 $saga-syllabus-border-color: rgba(0, 0, 0, 0.87);
+$name-cell-width: 141px;
+$code-cell-width: 80px;
+$ch-cell-width: 40px;
+$ch-cell-height: 50px;
+$border-width: 1px;
 
 .saga-syllabus-item-super-container {
   position: relative;
@@ -11,19 +16,23 @@ $saga-syllabus-border-color: rgba(0, 0, 0, 0.87);
   top: 3px;
 }
 
-$name-cell-width: 141px;
-$code-cell-width: 80px;
-$ch-cell-width: 50px;
+
 
 .saga-syllabus-item-container {
   display: flex;
   flex-direction: row;
   justify-content: left;
   align-content: center;
-  border: 1px solid $saga-syllabus-border-color;
-  min-height: 60px;
-  max-height: 60px;
-  font-size: 0.625rem;
+  border: $border-width solid $saga-syllabus-border-color;
+  margin-left: -$border-width/2;
+  margin-right: -$border-width/2;
+  margin-top: -$border-width;
+  margin-bottom: -$border-width/2;
+  min-height: $ch-cell-height;
+  max-height: $ch-cell-height;
+  font-size: 8px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 400;
 
   &>div {
     display: flex;
@@ -35,20 +44,21 @@ $ch-cell-width: 50px;
   }
 
   .saga-syllabus-item-name {
-    border-right: 1px solid $saga-syllabus-border-color;
-    padding: 5px 10px 5px 0px;
+    border-right: $border-width solid $saga-syllabus-border-color;
+    padding: 5px 10px 5px 2px;
     max-width: $name-cell-width;
     min-width: $name-cell-width;
   }
 
   .saga-syllabus-item-code {
-    border-right: 1px solid $saga-syllabus-border-color;
+    border-right: $border-width solid $saga-syllabus-border-color;
     min-width: $code-cell-width;
     max-width: $code-cell-width;
     padding: 5px 2px 5px 2px;
   }
 
   .saga-syllabus-item-ch {
+    // border-right: 0px;
     min-width: $ch-cell-width;
     max-width: $ch-cell-width;
     padding: 5px 2px 5px 2px;

@@ -5,6 +5,11 @@ import {BehaviorSubject} from 'rxjs';
 import * as moment from 'moment';
 type Moment = moment.Moment;
 
+export enum BusinessStatusCode {
+  SUBJECT_CONFIRMATION_DONE = 'RATIFICACAO_CONCLUIDA',
+  SUBJECT_CONFIRMATION_DOING = 'RATIRICACAO_EM_ANDAMENTO',
+}
+
 export enum SagaCourseType {
   /** GRADUAÇÃO */
   UNDERGRADUATION = 'UNDERGRADUATION',
@@ -89,6 +94,7 @@ export interface ObjectReference {
 }
 
 export interface BusinessStatus {
+  code: BusinessStatusCode;
   name: string;
 }
 
@@ -205,7 +211,7 @@ export enum MergePlanning {
   MERGED_INSIDE_COURSE = 'MERGED_INSIDE_COURSE',
 
   /** ratifica disciplina com junção incluindo outros cursos */
-  MERGE_OTHER_COURSES = 'MERGE_OTHER_COURSES',
+  MERGED_OTHER_COURSES = 'MERGE_OTHER_COURSES',
 }
 
 /**

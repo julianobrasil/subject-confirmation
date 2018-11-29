@@ -6,10 +6,11 @@ import {
   EntityStatus,
   SyllabusInformation,
   SagaCourseType,
+  BusinessStatusCode,
 } from './subject-confirmation.service';
 
 import * as _moment from 'moment';
-import { default as _rollupMoment } from 'moment';
+import {default as _rollupMoment} from 'moment';
 const moment = _rollupMoment || _moment;
 
 export const _timelineItemTestConfirmed: TimelineItem = {
@@ -68,15 +69,15 @@ const dayShiftRef_NOTURNO: ObjectReference = {
   description: 'NOTURNO',
 };
 
-export const items_2017_2: TimelineItem[] = [
+const items_2017_1_primeiro_per: TimelineItem[] = [
   /** disciplina ratificada no 1o período, pertencente ao período correto, e no histórico */
   {
     performed: {
       subjectGroupName: '',
       equivalentSubject: null,
       lecturePeriodRef: {
-        code: '2_lp',
-        description: 'GRADUAÇÃO::2017::2',
+        code: '1_lp',
+        description: 'GRADUAÇÃO::2017::1',
       },
       mergedTimeLineItems: [],
       mergingPlanned: MergePlanning.NO_MERGE,
@@ -92,82 +93,19 @@ export const items_2017_2: TimelineItem[] = [
       suggestedSequence: 1,
     },
   },
-  /** disciplina ratificada no primeiro período, do 2o período (antecipada), e no histórico */
+  /** disciplina não ratificada do módulo 1 */
   {
     performed: {
       subjectGroupName: '',
       equivalentSubject: null,
       lecturePeriodRef: {
-        code: '2_lp',
-        description: 'GRADUAÇÃO::2017::2',
+        code: '3_lp',
+        description: 'GRADUAÇÃO::2018::1',
       },
       mergedTimeLineItems: [],
       mergingPlanned: MergePlanning.NO_MERGE,
-      sequence: 1,
+      sequence: 3,
     },
-    plannedSyllabusItem: {
-      creditHours: 120,
-      equivalences: '',
-      preRequirements: '',
-      subjectCode: 'MAT5119',
-      subjectDescription: 'CÁLCULO I',
-      suggestedSequence: 2,
-    },
-  },
-  /** disciplina ratificada no 1o período, do 3o período (antecipada), cursada por equivalência */
-  {
-    performed: {
-      subjectGroupName: '',
-      equivalentSubject: {
-        code: 'MAT201715',
-        description: 'NOVO MATERIAIS PARA ENGENHARIA',
-      },
-      lecturePeriodRef: {
-        code: '2_lp',
-        description: 'GRADUAÇÃO::2017::2',
-      },
-      mergedTimeLineItems: [
-        {
-          campusRef: campusRef_PERIMETRAL,
-          courseRef: courseRef_CONTROLE,
-          courseTypeRef: courseTypeRef_GRADUACAO,
-          dayShiftRef: dayShiftRef_NOTURNO,
-          sequence: 3,
-          timelineRef: {
-            code: '1_tl',
-            description: '2017-1',
-          },
-        },
-        {
-          campusRef: campusRef_PERIMETRAL,
-          courseRef: {
-            code: '2_ENG_CIVIL',
-            description: 'ENGENHARIA CIVIL',
-          },
-          courseTypeRef: courseTypeRef_GRADUACAO,
-          dayShiftRef: dayShiftRef_NOTURNO,
-          sequence: 4,
-          timelineRef: {
-            code: '15_tl',
-            description: '2016-2',
-          },
-        },
-      ],
-      mergingPlanned: MergePlanning.MERGE_OTHER_COURSES,
-      sequence: 1,
-    },
-    plannedSyllabusItem: {
-      creditHours: 80,
-      equivalences: '(MAT201715) OU (MAT300002)',
-      preRequirements: '',
-      subjectCode: 'ENG5175',
-      subjectDescription: 'ANTIGO MATERIAIS PARA ENGENHARIA',
-      suggestedSequence: 3,
-    },
-  },
-  /** disciplina não ratificada do módulo 1 */
-  {
-    performed: null,
     plannedSyllabusItem: {
       creditHours: 80,
       equivalences: '',
@@ -189,15 +127,50 @@ export const items_2017_2: TimelineItem[] = [
       suggestedSequence: 1,
     },
   },
-  /** disciplina não ratificada do módulo 2 */
+];
+
+const items_2017_1_segundo_per: TimelineItem[] = [
+  /** disciplina ratificada no primeiro período, do 2o período (antecipada), e no histórico */
   {
-    performed: null,
+    performed: {
+      subjectGroupName: '',
+      equivalentSubject: null,
+      lecturePeriodRef: {
+        code: '2_lp',
+        description: 'GRADUAÇÃO::2017::2',
+      },
+      mergedTimeLineItems: [],
+      mergingPlanned: MergePlanning.NO_MERGE,
+      sequence: 2,
+    },
     plannedSyllabusItem: {
-      creditHours: 60,
+      creditHours: 120,
       equivalences: '',
       preRequirements: '',
-      subjectCode: 'MAT201748',
-      subjectDescription: 'ÁLGEBRA LINEAR PARA ENGENHARIA',
+      subjectCode: 'MAT5119',
+      subjectDescription: 'CÁLCULO I',
+      suggestedSequence: 2,
+    },
+  },
+  /** disciplina não ratificada do módulo 2 */
+  {
+    performed: {
+      subjectGroupName: '',
+      equivalentSubject: null,
+      lecturePeriodRef: {
+        code: '3_lp',
+        description: 'GRADUAÇÃO::2018::1',
+      },
+      mergedTimeLineItems: [],
+      mergingPlanned: MergePlanning.MERGED_INSIDE_COURSE,
+      sequence: 3,
+    },
+    plannedSyllabusItem: {
+      creditHours: 40,
+      equivalences: '',
+      preRequirements: '',
+      subjectCode: 'ABC3454',
+      subjectDescription: 'METODOLOGIA CIENTÍFICA',
       suggestedSequence: 2,
     },
   },
@@ -208,8 +181,8 @@ export const items_2017_2: TimelineItem[] = [
       subjectGroupName: '',
       equivalentSubject: null,
       lecturePeriodRef: {
-        code: '3_lp',
-        description: 'GRADUAÇÃO::2018::1',
+        code: '2_lp',
+        description: 'GRADUAÇÃO::2017::2',
       },
       mergedTimeLineItems: [
         {
@@ -246,8 +219,8 @@ export const items_2017_2: TimelineItem[] = [
       subjectGroupName: '',
       equivalentSubject: null,
       lecturePeriodRef: {
-        code: '3_lp',
-        description: 'GRADUAÇÃO::2018::1',
+        code: '1_lp',
+        description: 'GRADUAÇÃO::2017::1',
       },
       mergedTimeLineItems: [
         {
@@ -276,7 +249,7 @@ export const items_2017_2: TimelineItem[] = [
           },
         },
       ],
-      mergingPlanned: MergePlanning.MERGE_OTHER_COURSES,
+      mergingPlanned: MergePlanning.MERGED_OTHER_COURSES,
       sequence: 2,
     },
     plannedSyllabusItem: {
@@ -288,10 +261,74 @@ export const items_2017_2: TimelineItem[] = [
       suggestedSequence: 2,
     },
   },
+];
+
+const items_2017_1_terceiro_per: TimelineItem[] = [
+  /** disciplina ratificada no 1o período, do 3o período (antecipada), cursada por equivalência */
+  {
+    performed: {
+      subjectGroupName: '',
+      equivalentSubject: {
+        code: 'MAT201715',
+        description: 'NOVO MATERIAIS PARA ENGENHARIA',
+      },
+      lecturePeriodRef: {
+        code: '1_lp',
+        description: 'GRADUAÇÃO::2017::1',
+      },
+      mergedTimeLineItems: [
+        {
+          campusRef: campusRef_PERIMETRAL,
+          courseRef: courseRef_CONTROLE,
+          courseTypeRef: courseTypeRef_GRADUACAO,
+          dayShiftRef: dayShiftRef_NOTURNO,
+          sequence: 3,
+          timelineRef: {
+            code: '1_tl',
+            description: '2017-1',
+          },
+        },
+        {
+          campusRef: campusRef_PERIMETRAL,
+          courseRef: {
+            code: '2_ENG_CIVIL',
+            description: 'ENGENHARIA CIVIL',
+          },
+          courseTypeRef: courseTypeRef_GRADUACAO,
+          dayShiftRef: dayShiftRef_NOTURNO,
+          sequence: 4,
+          timelineRef: {
+            code: '15_tl',
+            description: '2016-2',
+          },
+        },
+      ],
+      mergingPlanned: MergePlanning.MERGED_OTHER_COURSES,
+      sequence: 1,
+    },
+    plannedSyllabusItem: {
+      creditHours: 80,
+      equivalences: '(MAT201715) OU (MAT300002)',
+      preRequirements: '',
+      subjectCode: 'ENG5175',
+      subjectDescription: 'ANTIGO MATERIAIS PARA ENGENHARIA',
+      suggestedSequence: 3,
+    },
+  },
 
   /** disciplina não ratificada do módulo 3 */
   {
-    performed: null,
+    performed: {
+      subjectGroupName: '',
+      equivalentSubject: null,
+      lecturePeriodRef: {
+        code: '3_lp',
+        description: 'GRADUAÇÃO::2018::1',
+      },
+      mergedTimeLineItems: [],
+      mergingPlanned: MergePlanning.MERGED_INSIDE_COURSE,
+      sequence: 3,
+    },
     plannedSyllabusItem: {
       creditHours: 80,
       equivalences: '',
@@ -314,10 +351,22 @@ export const items_2017_2: TimelineItem[] = [
       suggestedSequence: 3,
     },
   },
+];
 
+const items_2017_2_quarto_per: TimelineItem[] = [
   /** disciplina não ratificada do módulo 4 */
   {
-    performed: null,
+    performed: {
+      subjectGroupName: '',
+      equivalentSubject: null,
+      lecturePeriodRef: {
+        code: '3_lp',
+        description: 'GRADUAÇÃO::2018::1',
+      },
+      mergedTimeLineItems: [],
+      mergingPlanned: MergePlanning.MERGED_OTHER_COURSES,
+      sequence: 3,
+    },
     plannedSyllabusItem: {
       creditHours: 80,
       equivalences: '',
@@ -340,7 +389,9 @@ export const items_2017_2: TimelineItem[] = [
       suggestedSequence: 4,
     },
   },
+];
 
+const items_2017_2_quinto_per: TimelineItem[] = [
   /** disciplina não ratificada do módulo 5 */
   {
     performed: null,
@@ -379,6 +430,14 @@ export const items_2017_2: TimelineItem[] = [
       suggestedSequence: 5,
     },
   },
+];
+
+export const items_2017_2: TimelineItem[] = [
+  ...items_2017_1_primeiro_per,
+  ...items_2017_1_segundo_per,
+  ...items_2017_1_terceiro_per,
+  ...items_2017_2_quarto_per,
+  ...items_2017_2_quinto_per,
 ];
 
 const syllabusInformation: SyllabusInformation = {
@@ -435,7 +494,18 @@ export const _timeline: Timeline = {
         description: 'GRADUAÇÃO::2017::2',
       },
       businessStatus: {
-        name: 'RATIFICACAO_FINALIZADA',
+        code: BusinessStatusCode.SUBJECT_CONFIRMATION_DONE,
+        name: 'Ratificação finalizada',
+      },
+    },
+    {
+      lecturePeriodRef: {
+        code: '1_lp',
+        description: 'GRADUAÇÃO::2017::1',
+      },
+      businessStatus: {
+        code: BusinessStatusCode.SUBJECT_CONFIRMATION_DONE,
+        name: 'Ratificação finalizada',
       },
     },
     {
@@ -444,22 +514,14 @@ export const _timeline: Timeline = {
         description: 'GRADUAÇÃO::2018::1',
       },
       businessStatus: {
-        name: 'RATIFICACAO_FINALIZADA',
-      },
-    },
-    {
-      lecturePeriodRef: {
-        code: '4_lp',
-        description: 'GRADUAÇÃO::2018::1',
-      },
-      businessStatus: {
-        name: 'RATIFICACAO_EM_ANDAMENTO',
+        code: BusinessStatusCode.SUBJECT_CONFIRMATION_DOING,
+        name: 'Ratificação em Andamento',
       },
     },
   ],
   startLecturePeriodRef: {
-    code: '2_lp',
-    description: 'GRADUAÇÃO::2017::2',
+    code: '1_lp',
+    description: 'GRADUAÇÃO::2017::1',
   },
 
   syllabusInformation,

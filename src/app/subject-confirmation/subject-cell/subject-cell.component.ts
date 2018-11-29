@@ -176,7 +176,7 @@ export class SubjectCellComponent implements AfterViewInit, OnDestroy {
       }
 
       case SubjectCellComponentActions.CONFIRMATION_MERGE_OTHER_COURSES: {
-        timelineItem.performed.mergingPlanned = MergePlanning.MERGE_OTHER_COURSES;
+        timelineItem.performed.mergingPlanned = MergePlanning.MERGED_OTHER_COURSES;
         this._confirmMergeOtherCourses(timelineItem);
         break;
       }
@@ -311,7 +311,7 @@ export class SubjectCellComponent implements AfterViewInit, OnDestroy {
         break;
       }
 
-      case MergePlanning.MERGE_OTHER_COURSES: {
+      case MergePlanning.MERGED_OTHER_COURSES: {
         this._status = SubjectCellComponentActions.CONFIRMATION_MERGE_OTHER_COURSES;
         break;
       }
@@ -371,7 +371,7 @@ export class SubjectCellComponent implements AfterViewInit, OnDestroy {
       'saga-syllabus-item-container-confirm-merge-inner':
         timelineItem.performed.mergingPlanned === MergePlanning.MERGED_INSIDE_COURSE,
       'saga-syllabus-item-container-confirm-merge-outer':
-        timelineItem.performed.mergingPlanned === MergePlanning.MERGE_OTHER_COURSES,
+        timelineItem.performed.mergingPlanned === MergePlanning.MERGED_OTHER_COURSES,
     };
   }
 }
