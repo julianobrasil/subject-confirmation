@@ -1,20 +1,22 @@
-<div class="saga-timeline-identification-header">
-  {{timeline | timelineHeader | uppercase}}
-</div>
-<div class="saga-timeline-container">
-  <div *ngFor="let column of _timelineItems;index as i">
-    <!-- <pre>
+<div class="saga-timeline-super-container">
+  <div class="saga-timeline-identification-header">
+    {{timeline | timelineHeader | uppercase}}
+  </div>
+  <div class="saga-timeline-container">
+    <div *ngFor="let column of _timelineItems;index as i">
+      <!-- <pre>
           {{column | json}}
       </pre> -->
-    <div class="saga-timeline-column-header">
-      {{timeline | moduleHeader: i}}
-    </div>
+      <div class="saga-timeline-column-header">
+        {{timeline | moduleHeader: i}}
+      </div>
 
-    <app-subject-cell *ngFor="let cell of column"
-                      (action)="_actionHandler($event)"
-                      [sagaCourseType]="timeline.sagaCourseType"
-                      [targetLecturePeriodRef]="targetLecturePeriodRef"
-                      [timelineItem]="cell">
-    </app-subject-cell>
+      <app-subject-cell *ngFor="let cell of column"
+                        (action)="_actionHandler($event)"
+                        [sagaCourseType]="timeline.sagaCourseType"
+                        [targetLecturePeriodRef]="targetLecturePeriodRef"
+                        [timelineItem]="cell">
+      </app-subject-cell>
+    </div>
   </div>
 </div>

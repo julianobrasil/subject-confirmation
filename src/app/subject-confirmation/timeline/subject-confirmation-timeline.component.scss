@@ -1,6 +1,7 @@
 .saga-timeline-container {
   display: flex;
   flex-direction: row;
+  min-width: 100px;
 }
 
 $border-width: 1px;
@@ -14,11 +15,18 @@ $border-width: 1px;
   font-weight: 600;
 }
 
+.saga-timeline-super-container {
+  display: flex;
+  flex-direction: column;
+}
+
 .saga-timeline-identification-header {
+  flex: 0 0 100%;
   text-align: left;
   background-color: black;
   color: white;
   font-size: 14px;
   font-weight: 600;
   padding-left: 10px;
+  margin-right: -0.5px;
 }
