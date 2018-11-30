@@ -9,12 +9,12 @@ import {
   OnDestroy,
 } from '@angular/core';
 
-import {SatPopoverAnchor} from '@ncstate/sat-popover';
+import { SatPopoverAnchor } from '@ncstate/sat-popover';
 
-import {Subject, merge} from 'rxjs';
-import {debounceTime, takeUntil} from 'rxjs/operators';
+import { Subject, merge } from 'rxjs';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 
-import {TimelineItem, ObjectReference, SagaCourseType, MergePlanning} from '../definitions';
+import { TimelineItem, ObjectReference, SagaCourseType, MergePlanning } from '../../definitions';
 
 export enum SubjectCellComponentActions {
   /** ratifica disciplina sem junção */
@@ -27,7 +27,7 @@ export enum SubjectCellComponentActions {
   CONFIRMATION_MERGED_INSIDE_COURSE = 'CONFIRMATION_MERGED_INSIDE_COURSE',
 
   /** ratifica disciplina com junção incluindo outros cursos */
-  CONFIRMATION_MERGE_OTHER_COURSES = 'CONFIRMATION_MERGE_OTHER_COURSES',
+  CONFIRMATION_MERGED_OTHER_COURSES = 'CONFIRMATION_MERGED_OTHER_COURSES',
 }
 
 export interface SubjectCellComponentEvent {
@@ -41,6 +41,9 @@ export interface SubjectCellComponentEvent {
   styleUrls: ['./subject-cell.component.scss'],
 })
 export class SubjectCellComponent implements AfterViewInit, OnDestroy {
+  /** div principal, que envolve toda a célula */
+  @ViewChild('wrapperDiv') _wrapperDiv: ElementRef;
+
   /** item da timeline */
   private _timelineItemLoaded$: Subject<void> = new Subject<void>();
   private _timelineItem: TimelineItem;
@@ -73,8 +76,8 @@ export class SubjectCellComponent implements AfterViewInit, OnDestroy {
   @Output()
   action: EventEmitter<SubjectCellComponentEvent> = new EventEmitter<SubjectCellComponentEvent>();
 
-  /** div principal, que envolve toda a célula */
-  @ViewChild('wrapperDiv') _wrapperDiv: ElementRef;
+  /** valor emitido do componente */
+  _currentMergingStatus: SubjectCellComponentActions;
 
   /** largura da div principal, que envolve toda a célula em pixels */
   _wrapperDivWidth: any;
@@ -83,11 +86,9 @@ export class SubjectCellComponent implements AfterViewInit, OnDestroy {
   _ACTIONS = SubjectCellComponentActions;
 
   /** classe que envolve toda a div de celula */
-  _wrapperClass: {[key: string]: boolean} = {
+  _wrapperClass: { [key: string]: boolean } = {
     'saga-syllabus-item-container': true,
   };
-
-  _status: SubjectCellComponentActions;
 
   /** destrói as assinaturas de observables quando o componente é destruído */
   private _destroy$: Subject<void> = new Subject<void>();
@@ -109,7 +110,7 @@ export class SubjectCellComponent implements AfterViewInit, OnDestroy {
 
     const boundingRect: ClientRect | DOMRect = div.getBoundingClientRect();
 
-    setTimeout(() => (this._wrapperDivWidth = {width: `${boundingRect.width}px`}));
+    setTimeout(() => (this._wrapperDivWidth = { width: `${boundingRect.width}px` }));
   }
 
   ngOnDestroy(): void {
@@ -150,18 +151,18 @@ export class SubjectCellComponent implements AfterViewInit, OnDestroy {
   }
 
   _changeSubjectStatus(action: SubjectCellComponentActions): void {
-    const timelineItem: TimelineItem = {...this.timelineItem};
+    const timelineItem: TimelineItem = { ...this.timelineItem };
 
     timelineItem.performed = timelineItem.performed
-      ? {...timelineItem.performed, mergingPlanned: MergePlanning.MERGED_INSIDE_COURSE}
+      ? { ...timelineItem.performed, mergingPlanned: MergePlanning.MERGED_INSIDE_COURSE }
       : {
-          subjectGroupName: '',
-          equivalentSubject: null,
-          lecturePeriodRef: this.targetLecturePeriodRef,
-          mergedTimeLineItems: [],
-          mergingPlanned: null,
-          sequence: null, // TODO(@julianobrasil): é preciso inferir o período/módulo do curso aqui
-        };
+        subjectGroupName: '',
+        equivalentSubject: null,
+        lecturePeriodRef: this.targetLecturePeriodRef,
+        mergedTimeLineItems: [],
+        mergingPlanned: null,
+        sequence: null, // TODO(@julianobrasil): é preciso inferir o período/módulo do curso aqui
+      };
 
     switch (action) {
       case SubjectCellComponentActions.CANCEL_CONFIRMATION: {
@@ -176,7 +177,7 @@ export class SubjectCellComponent implements AfterViewInit, OnDestroy {
         break;
       }
 
-      case SubjectCellComponentActions.CONFIRMATION_MERGE_OTHER_COURSES: {
+      case SubjectCellComponentActions.CONFIRMATION_MERGED_OTHER_COURSES: {
         timelineItem.performed.mergingPlanned = MergePlanning.MERGED_OTHER_COURSES;
         this._confirmMergeOtherCourses(timelineItem);
         break;
@@ -201,7 +202,7 @@ export class SubjectCellComponent implements AfterViewInit, OnDestroy {
       timelineItem,
     });
 
-    this._status = SubjectCellComponentActions.CONFIRMATION_NO_MERGE;
+    this._currentMergingStatus = SubjectCellComponentActions.CONFIRMATION_NO_MERGE;
   }
 
   /**
@@ -211,11 +212,11 @@ export class SubjectCellComponent implements AfterViewInit, OnDestroy {
     this._setWrapperClass(timelineItem);
 
     this.action.emit({
-      actionType: SubjectCellComponentActions.CONFIRMATION_MERGE_OTHER_COURSES,
+      actionType: SubjectCellComponentActions.CONFIRMATION_MERGED_OTHER_COURSES,
       timelineItem,
     });
 
-    this._status = SubjectCellComponentActions.CONFIRMATION_MERGE_OTHER_COURSES;
+    this._currentMergingStatus = SubjectCellComponentActions.CONFIRMATION_MERGED_OTHER_COURSES;
   }
 
   /**
@@ -229,7 +230,7 @@ export class SubjectCellComponent implements AfterViewInit, OnDestroy {
       timelineItem,
     });
 
-    this._status = SubjectCellComponentActions.CONFIRMATION_MERGED_INSIDE_COURSE;
+    this._currentMergingStatus = SubjectCellComponentActions.CONFIRMATION_MERGED_INSIDE_COURSE;
   }
 
   /**
@@ -245,7 +246,7 @@ export class SubjectCellComponent implements AfterViewInit, OnDestroy {
     };
 
     timelineItem.performed = timelineItem.performed
-      ? {...timelineItem.performed, lecturePeriodRef: this.targetLecturePeriodRef}
+      ? { ...timelineItem.performed, lecturePeriodRef: this.targetLecturePeriodRef }
       : timelineItem.performed;
 
     this.action.emit({
@@ -253,27 +254,27 @@ export class SubjectCellComponent implements AfterViewInit, OnDestroy {
       timelineItem,
     });
 
-    this._status = SubjectCellComponentActions.CANCEL_CONFIRMATION;
+    this._currentMergingStatus = SubjectCellComponentActions.CANCEL_CONFIRMATION;
   }
 
   /** mostra o botão de cancelar */
   get _showCancelButton(): boolean {
-    return !!this._status && this._status !== SubjectCellComponentActions.CANCEL_CONFIRMATION;
+    return !!this._currentMergingStatus && this._currentMergingStatus !== SubjectCellComponentActions.CANCEL_CONFIRMATION;
   }
 
   /** mostra botão de marcar como junção com outros cursos */
   get _showMergeToOthersButton(): boolean {
-    return this._status !== SubjectCellComponentActions.CONFIRMATION_MERGE_OTHER_COURSES;
+    return this._currentMergingStatus !== SubjectCellComponentActions.CONFIRMATION_MERGED_OTHER_COURSES;
   }
 
   /** mostra botão de marcar como junção dentro de um mesmo curso */
   get _showMergeInsideCourseButton(): boolean {
-    return this._status !== SubjectCellComponentActions.CONFIRMATION_MERGED_INSIDE_COURSE;
+    return this._currentMergingStatus !== SubjectCellComponentActions.CONFIRMATION_MERGED_INSIDE_COURSE;
   }
 
   /** mostra botão de confirmar sem junção  */
   get _showConfirmationWithNoMergeButton(): boolean {
-    return this._status !== SubjectCellComponentActions.CONFIRMATION_NO_MERGE;
+    return this._currentMergingStatus !== SubjectCellComponentActions.CONFIRMATION_NO_MERGE;
   }
 
   /**
@@ -308,17 +309,17 @@ export class SubjectCellComponent implements AfterViewInit, OnDestroy {
 
     switch (this._timelineItem.performed.mergingPlanned) {
       case MergePlanning.MERGED_INSIDE_COURSE: {
-        this._status = SubjectCellComponentActions.CONFIRMATION_MERGED_INSIDE_COURSE;
+        this._currentMergingStatus = SubjectCellComponentActions.CONFIRMATION_MERGED_INSIDE_COURSE;
         break;
       }
 
       case MergePlanning.MERGED_OTHER_COURSES: {
-        this._status = SubjectCellComponentActions.CONFIRMATION_MERGE_OTHER_COURSES;
+        this._currentMergingStatus = SubjectCellComponentActions.CONFIRMATION_MERGED_OTHER_COURSES;
         break;
       }
 
       default: {
-        this._status = SubjectCellComponentActions.CONFIRMATION_NO_MERGE;
+        this._currentMergingStatus = SubjectCellComponentActions.CONFIRMATION_NO_MERGE;
       }
     }
   }

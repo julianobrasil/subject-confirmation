@@ -6,7 +6,7 @@ import {
   TimelineItem,
   LecturePeriodConfirmationStatus,
   BusinessStatusCode,
-} from '../../definitions';
+} from '../../../definitions';
 
 @Pipe({
   name: 'timelineHeader',

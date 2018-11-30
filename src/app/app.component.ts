@@ -1,10 +1,14 @@
 import { Component } from '@angular/core';
 
 
-import {User} from './subject-confirmation/definitions';
+import {User, Timeline} from './definitions';
 
 import * as moment from 'moment';
 type Moment = moment.Moment;
+
+import * as dataTest from './data-test';
+import * as dataTest2 from './data-test2';
+import { SubjectCellComponentEvent } from './subject-confirmation';
 
 @Component({
   selector: 'app-root',
@@ -27,11 +31,11 @@ export class AppComponent {
     },
   };
 
-  buildNewDate(date: Moment, days: number): Moment {
-    const newDate = moment.utc(date);
+  _timelines: Timeline[] = [dataTest._timeline, dataTest2._timeline];
 
-    newDate.add(days, 'days');
+  _targetLecturePeriod = dataTest.lecturePeriodRef;
 
-    return newDate;
+  _actionHandler(evt: SubjectCellComponentEvent) {
+    console.log(evt);
   }
 }

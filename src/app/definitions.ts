@@ -1,7 +1,7 @@
 import {BehaviorSubject} from 'rxjs';
 
 import * as moment from 'moment';
-import {TimelineHeaderPipe} from './timeline/pipes/timeline-header.pipe';
+import {TimelineHeaderPipe} from './subject-confirmation/timeline/pipes/timeline-header.pipe';
 type Moment = moment.Moment;
 
 export enum BusinessStatusCode {

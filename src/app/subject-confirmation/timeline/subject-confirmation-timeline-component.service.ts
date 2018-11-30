@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {TimelineItem} from '../definitions';
+import {TimelineItem} from '../../definitions';
 
 @Injectable({
   providedIn: 'root',

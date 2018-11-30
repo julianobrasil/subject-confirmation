@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 
-import {Timeline} from './definitions';
+import {Timeline} from '../definitions';
 
 import {TimelineHeaderPipe} from './timeline/pipes/timeline-header.pipe';
 
@@ -11,6 +11,10 @@ import {TimelineHeaderPipe} from './timeline/pipes/timeline-header.pipe';
 })
 export class SubjectConfirmationComponentService {
   sortTimelines(timelines: Timeline[]): Timeline[] {
+    if(!timelines) {
+      return [];
+    }
+
     const correctSequence: number[] = [];
 
     const pipe: TimelineHeaderPipe = new TimelineHeaderPipe();

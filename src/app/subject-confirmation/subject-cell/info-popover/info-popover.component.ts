@@ -1,7 +1,7 @@
 import {Component, Input, ViewEncapsulation} from '@angular/core';
 import {trigger, state, style, transition, animate} from '@angular/animations';
 
-import {TimelineItem, SagaCourseType, getCourseTypeName} from '../../definitions';
+import {TimelineItem, SagaCourseType, getCourseTypeName} from '../../../definitions';
 
 @Component({
   selector: 'app-info-popover',

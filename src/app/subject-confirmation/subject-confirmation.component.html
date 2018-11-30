@@ -1,10 +1,10 @@
-<div *ngFor="let timeline of _timelines"
+<div *ngFor="let timeline of timelines"
      class="saga-timeline-wrapper">
   <mat-card>
     <mat-card-content>
       <div class="saga-card-content-wrapper">
         <app-subject-confirmation-timeline [timeline]="timeline"
-                                           [targetLecturePeriodRef]="_targetLecturePeriod">
+                                           [targetLecturePeriodRef]="targetLecturePeriodRef">
         </app-subject-confirmation-timeline>
       </div>
     </mat-card-content>

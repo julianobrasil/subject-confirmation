@@ -1,6 +1,6 @@
 import {Pipe, PipeTransform} from '@angular/core';
 
-import {Timeline, SagaCourseType} from '../../definitions';
+import {Timeline, SagaCourseType} from '../../../definitions';
 
 @Pipe({
   name: 'moduleHeader',

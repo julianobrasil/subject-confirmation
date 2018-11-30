@@ -1,4 +1,5 @@
 <h1>RATIFICAÇÃO DE DISCIPLINAS (VERSÃO DE RASCUNHO)</h1>
-<app-subject-confirmation></app-subject-confirmation>
-
-
+<app-subject-confirmation (action)="_actionHandler($event)"
+                          [timelines]="_timelines"
+                          [targetLecturePeriodRef]="_targetLecturePeriod">
+</app-subject-confirmation>

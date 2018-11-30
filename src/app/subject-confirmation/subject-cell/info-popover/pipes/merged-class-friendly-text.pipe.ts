@@ -1,6 +1,6 @@
 import {Pipe, PipeTransform} from '@angular/core';
 
-import {MergedTimeLine, SagaCourseType} from '../../../definitions';
+import {MergedTimeLine, SagaCourseType} from '../../../../definitions';
 
 @Pipe({
   name: 'mergedClassFriendlyText',

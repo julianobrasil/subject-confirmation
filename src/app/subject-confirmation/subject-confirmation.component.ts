@@ -1,4 +1,4 @@
-import {Component, ViewEncapsulation} from '@angular/core';
+import { Component, ViewEncapsulation, Output, EventEmitter, Input } from '@angular/core';
 
 import {
   SubjectConfirmationComponentService,
@@ -9,10 +9,10 @@ import {
 } from './subject-cell/subject-cell.component';
 
 
-import * as dataTest from './data-test';
-import * as dataTest2 from './data-test2';
 
-import {Timeline, TimelineItem, ObjectReference} from './definitions';
+
+import { Timeline, TimelineItem, ObjectReference } from '../definitions';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-subject-confirmation',
@@ -21,26 +21,43 @@ import {Timeline, TimelineItem, ObjectReference} from './definitions';
   encapsulation: ViewEncapsulation.None,
 })
 export class SubjectConfirmationComponent {
-
-  _targetLecturePeriod = dataTest.lecturePeriodRef;
-
-  _timelines: Timeline[] = [];
-
-  _timeline: Timeline = dataTest._timeline;
-
-  _timelineItemTest: TimelineItem = dataTest.items_2017_2[2];
-
-  _lecturePeriodRefTest: ObjectReference = dataTest.items_2017_2[6].performed.lecturePeriodRef;
-
-  actionTaken: SubjectCellComponentEvent;
-
-  constructor(private _componentService: SubjectConfirmationComponentService) {
-    const tls: Timeline[] = [dataTest._timeline, dataTest2._timeline];
-
-    this._timelines = this._componentService.sortTimelines(tls);
+  /** timelines que o componente irá desenhar na tela */
+  _timelinesLoaded$: Subject<void> = new Subject<void>();
+  private _timelines: Timeline[] = [];
+  @Input()
+  get timelines(): Timeline[] { return this._timelines; }
+  set timelines(timelines: Timeline[]) {
+    this._timelines = this._componentService.sortTimelines(timelines);
+    this._timelinesLoaded$.next();
   }
 
+  /** período letivo que está sendo ratificado */
+  private _targetLecturePeriodRefLoaded$: Subject<void> = new Subject<void>();
+  private _targetLecturePeriodRef: ObjectReference;
+  @Input()
+  get targetLecturePeriodRef(): ObjectReference { return this._targetLecturePeriodRef; }
+  set targetLecturePeriodRef(lp: ObjectReference) {
+    this._targetLecturePeriodRef = lp;
+    this._targetLecturePeriodRefLoaded$.next();
+  }
+
+  /** emite quando o usuário escolhe uma opção do menu de contexto */
+  @Output()
+  action: EventEmitter<SubjectCellComponentEvent> = new EventEmitter<SubjectCellComponentEvent>();
+
+  /** grava a última ação executada */
+  actionTaken: SubjectCellComponentEvent;
+
+  constructor(private _componentService: SubjectConfirmationComponentService) { }
+
+  /**
+   * Grava a última ação executada e a reemite
+   *
+   * @param evt
+   */
   _actionHandler(evt: SubjectCellComponentEvent) {
     this.actionTaken = evt;
+
+    this.action.emit(evt);
   }
 }
