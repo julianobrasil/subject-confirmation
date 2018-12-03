@@ -7,6 +7,7 @@ import {
   SagaCourseType,
   EntityStatus,
   BusinessStatusCode,
+  SyllabusItemType,
 } from './definitions';
 
 import * as _moment from 'moment';
@@ -15,7 +16,7 @@ const moment = _rollupMoment || _moment;
 
 export const _timelineItemTestConfirmed: TimelineItem = {
   performed: {
-    subjectGroupName: '',
+    electibleSubject: null,
     equivalentSubject: null,
     lecturePeriodRef: {
       code: '12323243243',
@@ -26,6 +27,7 @@ export const _timelineItemTestConfirmed: TimelineItem = {
     sequence: null,
   },
   plannedSyllabusItem: {
+    type: SyllabusItemType.MANDATORY,
     creditHours: 300,
     equivalences: '',
     preRequirements: '',
@@ -39,6 +41,7 @@ export const _timelineItemTestConfirmed: TimelineItem = {
 export const _timelineItemTestNotConfirmed: TimelineItem = {
   performed: null,
   plannedSyllabusItem: {
+    type: SyllabusItemType.MANDATORY,
     creditHours: 300,
     equivalences: '',
     preRequirements: '',
@@ -48,6 +51,8 @@ export const _timelineItemTestNotConfirmed: TimelineItem = {
     suggestedSequence: 1,
   },
 };
+
+export const idRef = '1';
 
 export const campusRef_PERIMETRAL: ObjectReference = {
   code: '1',
@@ -73,7 +78,7 @@ const items_2017_1_primeiro_per: TimelineItem[] = [
   /** disciplina ratificada no 1o período, pertencente ao período correto, e no histórico */
   {
     performed: {
-      subjectGroupName: '',
+      electibleSubject: null,
       equivalentSubject: null,
       lecturePeriodRef: {
         code: '1_lp',
@@ -84,6 +89,7 @@ const items_2017_1_primeiro_per: TimelineItem[] = [
       sequence: 1,
     },
     plannedSyllabusItem: {
+      type: SyllabusItemType.MANDATORY,
       creditHours: 300,
       equivalences: '',
       preRequirements: '',
@@ -96,7 +102,7 @@ const items_2017_1_primeiro_per: TimelineItem[] = [
   /** disciplina não ratificada do módulo 1 */
   {
     performed: {
-      subjectGroupName: '',
+      electibleSubject: null,
       equivalentSubject: null,
       lecturePeriodRef: {
         code: '3_lp',
@@ -107,6 +113,7 @@ const items_2017_1_primeiro_per: TimelineItem[] = [
       sequence: 3,
     },
     plannedSyllabusItem: {
+      type: SyllabusItemType.MANDATORY,
       creditHours: 80,
       equivalences: '',
       preRequirements: '',
@@ -119,6 +126,7 @@ const items_2017_1_primeiro_per: TimelineItem[] = [
   {
     performed: null,
     plannedSyllabusItem: {
+      type: SyllabusItemType.MANDATORY,
       creditHours: 40,
       equivalences: '',
       preRequirements: '',
@@ -133,7 +141,7 @@ const items_2017_1_segundo_per: TimelineItem[] = [
   /** disciplina ratificada no primeiro período, do 2o período (antecipada), e no histórico */
   {
     performed: {
-      subjectGroupName: '',
+      electibleSubject: null,
       equivalentSubject: null,
       lecturePeriodRef: {
         code: '2_lp',
@@ -144,6 +152,7 @@ const items_2017_1_segundo_per: TimelineItem[] = [
       sequence: 2,
     },
     plannedSyllabusItem: {
+      type: SyllabusItemType.MANDATORY,
       creditHours: 120,
       equivalences: '',
       preRequirements: '',
@@ -155,7 +164,7 @@ const items_2017_1_segundo_per: TimelineItem[] = [
   /** disciplina não ratificada do módulo 2 */
   {
     performed: {
-      subjectGroupName: '',
+      electibleSubject: null,
       equivalentSubject: null,
       lecturePeriodRef: {
         code: '3_lp',
@@ -166,6 +175,7 @@ const items_2017_1_segundo_per: TimelineItem[] = [
       sequence: 3,
     },
     plannedSyllabusItem: {
+      type: SyllabusItemType.MANDATORY,
       creditHours: 40,
       equivalences: '',
       preRequirements: '',
@@ -178,7 +188,7 @@ const items_2017_1_segundo_per: TimelineItem[] = [
   /** disciplina ratificada 2o período, pertencente ao 2o período, com 3o período do mesmo curso (outra timeline) */
   {
     performed: {
-      subjectGroupName: '',
+      electibleSubject: null,
       equivalentSubject: null,
       lecturePeriodRef: {
         code: '2_lp',
@@ -186,6 +196,7 @@ const items_2017_1_segundo_per: TimelineItem[] = [
       },
       mergedTimeLineItems: [
         {
+          id: idRef,
           campusRef: campusRef_PERIMETRAL,
           courseRef: courseRef_CONTROLE,
           courseTypeRef: courseTypeRef_GRADUACAO,
@@ -201,6 +212,7 @@ const items_2017_1_segundo_per: TimelineItem[] = [
       sequence: 2,
     },
     plannedSyllabusItem: {
+      type: SyllabusItemType.MANDATORY,
       creditHours: 60,
       equivalences: '',
       preRequirements: '',
@@ -216,7 +228,7 @@ const items_2017_1_segundo_per: TimelineItem[] = [
    */
   {
     performed: {
-      subjectGroupName: '',
+      electibleSubject: null,
       equivalentSubject: null,
       lecturePeriodRef: {
         code: '1_lp',
@@ -224,6 +236,7 @@ const items_2017_1_segundo_per: TimelineItem[] = [
       },
       mergedTimeLineItems: [
         {
+          id: idRef,
           campusRef: campusRef_PERIMETRAL,
           courseRef: courseRef_CONTROLE,
           courseTypeRef: courseTypeRef_GRADUACAO,
@@ -235,6 +248,7 @@ const items_2017_1_segundo_per: TimelineItem[] = [
           },
         },
         {
+          id: idRef,
           campusRef: campusRef_PERIMETRAL,
           courseRef: {
             code: '2_ENG_CIVIL',
@@ -253,6 +267,7 @@ const items_2017_1_segundo_per: TimelineItem[] = [
       sequence: 2,
     },
     plannedSyllabusItem: {
+      type: SyllabusItemType.MANDATORY,
       creditHours: 40,
       equivalences: '',
       preRequirements: '',
@@ -267,7 +282,7 @@ const items_2017_1_terceiro_per: TimelineItem[] = [
   /** disciplina ratificada no 1o período, do 3o período (antecipada), cursada por equivalência */
   {
     performed: {
-      subjectGroupName: '',
+      electibleSubject: null,
       equivalentSubject: {
         code: 'MAT201715',
         description: 'NOVO MATERIAIS PARA ENGENHARIA',
@@ -278,6 +293,7 @@ const items_2017_1_terceiro_per: TimelineItem[] = [
       },
       mergedTimeLineItems: [
         {
+          id: idRef,
           campusRef: campusRef_PERIMETRAL,
           courseRef: courseRef_CONTROLE,
           courseTypeRef: courseTypeRef_GRADUACAO,
@@ -289,6 +305,7 @@ const items_2017_1_terceiro_per: TimelineItem[] = [
           },
         },
         {
+          id: idRef,
           campusRef: campusRef_PERIMETRAL,
           courseRef: {
             code: '2_ENG_CIVIL',
@@ -307,6 +324,7 @@ const items_2017_1_terceiro_per: TimelineItem[] = [
       sequence: 1,
     },
     plannedSyllabusItem: {
+      type: SyllabusItemType.MANDATORY,
       creditHours: 80,
       equivalences: '(MAT201715) OU (MAT300002)',
       preRequirements: '',
@@ -319,7 +337,7 @@ const items_2017_1_terceiro_per: TimelineItem[] = [
   /** disciplina não ratificada do módulo 3 */
   {
     performed: {
-      subjectGroupName: '',
+      electibleSubject: null,
       equivalentSubject: null,
       lecturePeriodRef: {
         code: '3_lp',
@@ -330,6 +348,7 @@ const items_2017_1_terceiro_per: TimelineItem[] = [
       sequence: 3,
     },
     plannedSyllabusItem: {
+      type: SyllabusItemType.MANDATORY,
       creditHours: 80,
       equivalences: '',
       preRequirements: '',
@@ -343,6 +362,7 @@ const items_2017_1_terceiro_per: TimelineItem[] = [
   {
     performed: null,
     plannedSyllabusItem: {
+      type: SyllabusItemType.MANDATORY,
       creditHours: 80,
       equivalences: '',
       preRequirements: '',
@@ -357,7 +377,7 @@ const items_2017_1_quarto_per: TimelineItem[] = [
   /** disciplina não ratificada do módulo 4 */
   {
     performed: {
-      subjectGroupName: '',
+      electibleSubject: null,
       equivalentSubject: null,
       lecturePeriodRef: {
         code: '3_lp',
@@ -368,6 +388,7 @@ const items_2017_1_quarto_per: TimelineItem[] = [
       sequence: 3,
     },
     plannedSyllabusItem: {
+      type: SyllabusItemType.MANDATORY,
       creditHours: 80,
       equivalences: '',
       preRequirements: '',
@@ -381,6 +402,7 @@ const items_2017_1_quarto_per: TimelineItem[] = [
   {
     performed: null,
     plannedSyllabusItem: {
+      type: SyllabusItemType.MANDATORY,
       creditHours: 60,
       equivalences: '',
       preRequirements: '',
@@ -396,6 +418,7 @@ const items_2017_1_quinto_per: TimelineItem[] = [
   {
     performed: null,
     plannedSyllabusItem: {
+      type: SyllabusItemType.MANDATORY,
       creditHours: 40,
       equivalences: '',
       preRequirements: '',
@@ -409,6 +432,7 @@ const items_2017_1_quinto_per: TimelineItem[] = [
   {
     performed: null,
     plannedSyllabusItem: {
+      type: SyllabusItemType.MANDATORY,
       creditHours: 80,
       equivalences: '',
       preRequirements: '',
@@ -422,6 +446,7 @@ const items_2017_1_quinto_per: TimelineItem[] = [
   {
     performed: null,
     plannedSyllabusItem: {
+      type: SyllabusItemType.MANDATORY,
       creditHours: 80,
       equivalences: '',
       preRequirements: '',
@@ -493,7 +518,7 @@ export const _timeline: Timeline = {
         code: '2_lp',
         description: 'GRADUAÇÃO::2017::2',
       },
-      businessStatus: {
+      confirmationStatus: {
         code: BusinessStatusCode.SUBJECT_CONFIRMATION_DONE,
         name: 'Ratificação finalizada',
       },
@@ -503,7 +528,7 @@ export const _timeline: Timeline = {
         code: '1_lp',
         description: 'GRADUAÇÃO::2017::1',
       },
-      businessStatus: {
+      confirmationStatus: {
         code: BusinessStatusCode.SUBJECT_CONFIRMATION_DONE,
         name: 'Ratificação finalizada',
       },
@@ -513,7 +538,7 @@ export const _timeline: Timeline = {
         code: '3_lp',
         description: 'GRADUAÇÃO::2018::1',
       },
-      businessStatus: {
+      confirmationStatus: {
         code: BusinessStatusCode.SUBJECT_CONFIRMATION_DOING,
         name: 'Ratificação em Andamento',
       },

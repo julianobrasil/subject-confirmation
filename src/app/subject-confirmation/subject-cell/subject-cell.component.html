@@ -11,15 +11,20 @@
        (contextmenu)="_openContextMenu($event, popoverAnchor)"
        [ngClass]="_wrapperClass"
        [satPopoverAnchorFor]="popover">
-    <div class="saga-syllabus-item-name">
+    <div [matTooltip]="_tooltipText"
+         matTooltipPosition="after"
+         matTooltipClass="saga-subject-confirmation-cell-tooltip-margin-bottom"
+         class="saga-syllabus-item-name">
       <div>{{ timelineItem?.plannedSyllabusItem?.subjectDescription }}</div>
     </div>
 
-    <div class="saga-syllabus-item-code">
+    <div *ngIf="false"
+         class="saga-syllabus-item-code">
       <div>{{ timelineItem?.plannedSyllabusItem?.subjectCode }}</div>
     </div>
 
-    <div class="saga-syllabus-item-ch">
+    <div *ngIf="false"
+         class="saga-syllabus-item-ch">
       <div>{{ timelineItem?.plannedSyllabusItem?.creditHours }}</div>
     </div>
   </div>
@@ -52,12 +57,7 @@
       </button>
 
       <button *ngIf="_showMergeToOthersButton"
-              (click)="
-          _confirmSubject(
-            popoverAnchor,
-            _ACTIONS.CONFIRMATION_MERGE_OTHER_COURSES
-          )
-        "
+              (click)="_confirmSubject(popoverAnchor,_ACTIONS.CONFIRMATION_MERGED_OTHER_COURSES)"
               mat-button
               type="button">
         <mat-icon>done_outline</mat-icon>
@@ -65,7 +65,7 @@
       </button>
 
       <div class="saga-full-width">
-        <mat-divider *ngIf="!!_status && _status !== _ACTIONS.CANCEL_CONFIRMATION"></mat-divider>
+        <mat-divider *ngIf="!!_currentMergingStatus && _currentMergingStatus !== _ACTIONS.CANCEL_CONFIRMATION"></mat-divider>
       </div>
 
       <button *ngIf="_showCancelButton"

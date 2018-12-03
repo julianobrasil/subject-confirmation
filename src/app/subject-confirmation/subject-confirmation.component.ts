@@ -1,18 +1,11 @@
-import { Component, ViewEncapsulation, Output, EventEmitter, Input } from '@angular/core';
+import {Component, ViewEncapsulation, Output, EventEmitter, Input} from '@angular/core';
 
-import {
-  SubjectConfirmationComponentService,
-} from './subject-confirmation-component.service';
+import {SubjectConfirmationComponentService} from './subject-confirmation-component.service';
 
-import {
-  SubjectCellComponentEvent,
-} from './subject-cell/subject-cell.component';
+import {SubjectCellComponentEvent} from './subject-cell/subject-cell.component';
 
-
-
-
-import { Timeline, TimelineItem, ObjectReference } from '../definitions';
-import { Subject } from 'rxjs';
+import {Timeline, TimelineItem, ObjectReference} from '../definitions';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-subject-confirmation',
@@ -25,7 +18,9 @@ export class SubjectConfirmationComponent {
   _timelinesLoaded$: Subject<void> = new Subject<void>();
   private _timelines: Timeline[] = [];
   @Input()
-  get timelines(): Timeline[] { return this._timelines; }
+  get timelines(): Timeline[] {
+    return this._timelines;
+  }
   set timelines(timelines: Timeline[]) {
     this._timelines = this._componentService.sortTimelines(timelines);
     this._timelinesLoaded$.next();
@@ -35,7 +30,9 @@ export class SubjectConfirmationComponent {
   private _targetLecturePeriodRefLoaded$: Subject<void> = new Subject<void>();
   private _targetLecturePeriodRef: ObjectReference;
   @Input()
-  get targetLecturePeriodRef(): ObjectReference { return this._targetLecturePeriodRef; }
+  get targetLecturePeriodRef(): ObjectReference {
+    return this._targetLecturePeriodRef;
+  }
   set targetLecturePeriodRef(lp: ObjectReference) {
     this._targetLecturePeriodRef = lp;
     this._targetLecturePeriodRefLoaded$.next();
@@ -48,12 +45,12 @@ export class SubjectConfirmationComponent {
   /** grava a última ação executada */
   actionTaken: SubjectCellComponentEvent;
 
-  constructor(private _componentService: SubjectConfirmationComponentService) { }
+  constructor(private _componentService: SubjectConfirmationComponentService) {}
 
   /**
    * Grava a última ação executada e a reemite
    *
-   * @param evt
+   * @param evt Evento emitido quando o usuário seleciona uma ação com o botão direito do mouse
    */
   _actionHandler(evt: SubjectCellComponentEvent) {
     this.actionTaken = evt;

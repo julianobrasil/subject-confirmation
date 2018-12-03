@@ -95,7 +95,7 @@ export class TimelineHeaderPipe implements PipeTransform {
   ): boolean {
     return lecturePeriodConfirmationStatuses.some(
       (value: LecturePeriodConfirmationStatus) =>
-        value.businessStatus.code === BusinessStatusCode.SUBJECT_CONFIRMATION_DONE &&
+        value.confirmationStatus.code === BusinessStatusCode.SUBJECT_CONFIRMATION_DONE &&
         value.lecturePeriodRef.code === timelineItem.performed.lecturePeriodRef.code,
     );
   }

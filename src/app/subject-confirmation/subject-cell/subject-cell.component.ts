@@ -7,15 +7,28 @@ import {
   Output,
   EventEmitter,
   OnDestroy,
+  ViewEncapsulation,
 } from '@angular/core';
 
-import { SatPopoverAnchor } from '@ncstate/sat-popover';
+import {SatPopoverAnchor} from '@ncstate/sat-popover';
 
-import { Subject, merge } from 'rxjs';
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import {Subject, merge} from 'rxjs';
+import {debounceTime, takeUntil} from 'rxjs/operators';
 
-import { TimelineItem, ObjectReference, SagaCourseType, MergePlanning } from '../../definitions';
+import {
+  TimelineItem,
+  ObjectReference,
+  SagaCourseType,
+  MergePlanning,
+  SyllabusItemType,
+} from '../../definitions';
 
+/**
+ * Tipo de ação realizada.
+ *
+ * @export
+ * @enum {number}
+ */
 export enum SubjectCellComponentActions {
   /** ratifica disciplina sem junção */
   CONFIRMATION_NO_MERGE = 'CONFIRMATION_NO_MERGE',
@@ -30,8 +43,27 @@ export enum SubjectCellComponentActions {
   CONFIRMATION_MERGED_OTHER_COURSES = 'CONFIRMATION_MERGED_OTHER_COURSES',
 }
 
+/**
+ * Evento emitido pelo componente de ratificação quando o usuário seleciona uma das opções do menu
+ *     de contexto em uma disciplina do mapa de disciplinas de uma turma.
+ *
+ * @export
+ */
 export interface SubjectCellComponentEvent {
+  /**
+   * Tipo de ação realizada
+   *
+   * @type {SubjectCellComponentActions}
+   * @memberof SubjectCellComponentEvent
+   */
   actionType: SubjectCellComponentActions;
+
+  /**
+   * Item da timeline de onde a ação se originou.
+   *
+   * @type {TimelineItem}
+   * @memberof SubjectCellComponentEvent
+   */
   timelineItem: TimelineItem;
 }
 
@@ -39,6 +71,7 @@ export interface SubjectCellComponentEvent {
   selector: 'app-subject-cell',
   templateUrl: './subject-cell.component.html',
   styleUrls: ['./subject-cell.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class SubjectCellComponent implements AfterViewInit, OnDestroy {
   /** div principal, que envolve toda a célula */
@@ -86,7 +119,7 @@ export class SubjectCellComponent implements AfterViewInit, OnDestroy {
   _ACTIONS = SubjectCellComponentActions;
 
   /** classe que envolve toda a div de celula */
-  _wrapperClass: { [key: string]: boolean } = {
+  _wrapperClass: {[key: string]: boolean} = {
     'saga-syllabus-item-container': true,
   };
 
@@ -110,7 +143,7 @@ export class SubjectCellComponent implements AfterViewInit, OnDestroy {
 
     const boundingRect: ClientRect | DOMRect = div.getBoundingClientRect();
 
-    setTimeout(() => (this._wrapperDivWidth = { width: `${boundingRect.width}px` }));
+    setTimeout(() => (this._wrapperDivWidth = {width: `${boundingRect.width}px`}));
   }
 
   ngOnDestroy(): void {
@@ -151,18 +184,18 @@ export class SubjectCellComponent implements AfterViewInit, OnDestroy {
   }
 
   _changeSubjectStatus(action: SubjectCellComponentActions): void {
-    const timelineItem: TimelineItem = { ...this.timelineItem };
+    const timelineItem: TimelineItem = {...this.timelineItem};
 
     timelineItem.performed = timelineItem.performed
-      ? { ...timelineItem.performed, mergingPlanned: MergePlanning.MERGED_INSIDE_COURSE }
+      ? {...timelineItem.performed, mergingPlanned: MergePlanning.MERGED_INSIDE_COURSE}
       : {
-        subjectGroupName: '',
-        equivalentSubject: null,
-        lecturePeriodRef: this.targetLecturePeriodRef,
-        mergedTimeLineItems: [],
-        mergingPlanned: null,
-        sequence: null, // TODO(@julianobrasil): é preciso inferir o período/módulo do curso aqui
-      };
+          electibleSubject: null,
+          equivalentSubject: null,
+          lecturePeriodRef: this.targetLecturePeriodRef,
+          mergedTimeLineItems: [],
+          mergingPlanned: null,
+          sequence: null, // TODO(@julianobrasil): é preciso inferir o período/módulo do curso aqui
+        };
 
     switch (action) {
       case SubjectCellComponentActions.CANCEL_CONFIRMATION: {
@@ -246,7 +279,7 @@ export class SubjectCellComponent implements AfterViewInit, OnDestroy {
     };
 
     timelineItem.performed = timelineItem.performed
-      ? { ...timelineItem.performed, lecturePeriodRef: this.targetLecturePeriodRef }
+      ? {...timelineItem.performed, lecturePeriodRef: this.targetLecturePeriodRef}
       : timelineItem.performed;
 
     this.action.emit({
@@ -259,17 +292,24 @@ export class SubjectCellComponent implements AfterViewInit, OnDestroy {
 
   /** mostra o botão de cancelar */
   get _showCancelButton(): boolean {
-    return !!this._currentMergingStatus && this._currentMergingStatus !== SubjectCellComponentActions.CANCEL_CONFIRMATION;
+    return (
+      !!this._currentMergingStatus &&
+      this._currentMergingStatus !== SubjectCellComponentActions.CANCEL_CONFIRMATION
+    );
   }
 
   /** mostra botão de marcar como junção com outros cursos */
   get _showMergeToOthersButton(): boolean {
-    return this._currentMergingStatus !== SubjectCellComponentActions.CONFIRMATION_MERGED_OTHER_COURSES;
+    return (
+      this._currentMergingStatus !== SubjectCellComponentActions.CONFIRMATION_MERGED_OTHER_COURSES
+    );
   }
 
   /** mostra botão de marcar como junção dentro de um mesmo curso */
   get _showMergeInsideCourseButton(): boolean {
-    return this._currentMergingStatus !== SubjectCellComponentActions.CONFIRMATION_MERGED_INSIDE_COURSE;
+    return (
+      this._currentMergingStatus !== SubjectCellComponentActions.CONFIRMATION_MERGED_INSIDE_COURSE
+    );
   }
 
   /** mostra botão de confirmar sem junção  */
@@ -289,6 +329,22 @@ export class SubjectCellComponent implements AfterViewInit, OnDestroy {
         !!this.timelineItem.performed.mergedTimeLineItems.length) ||
         !!this.timelineItem.performed.equivalentSubject)
     );
+  }
+
+  get _tooltipText(): string {
+    const subjectCode =
+      this.timelineItem.plannedSyllabusItem.type === SyllabusItemType.ELECTIVE
+        ? this.timelineItem.performed ? this.timelineItem.performed.electibleSubject.description : ''
+        : this.timelineItem && this.timelineItem.plannedSyllabusItem
+        ? this.timelineItem.plannedSyllabusItem.subjectCode
+        : '';
+
+    const subjectCreditHours =
+      this.timelineItem && this.timelineItem.plannedSyllabusItem
+        ? this.timelineItem.plannedSyllabusItem.creditHours
+        : '';
+
+    return subjectCode + ' (' + subjectCreditHours + ')';
   }
 
   /**

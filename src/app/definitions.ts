@@ -99,7 +99,7 @@ export interface BusinessStatus {
 
 export interface LecturePeriodConfirmationStatus {
   lecturePeriodRef: ObjectReference;
-  businessStatus: BusinessStatus;
+  confirmationStatus: BusinessStatus;
 }
 
 export enum EntityStatus {
@@ -170,7 +170,7 @@ export interface Timeline extends EntityModel {
   syllabusInformation: SyllabusInformation;
 
   /** indica quais items da timeline tiveram sua ratificação finalizada */
-  lecturePeriodConfirmationStatuses: Array<LecturePeriodConfirmationStatus>;
+  lecturePeriodConfirmationStatuses: LecturePeriodConfirmationStatus[];
 
   /** disciplinas ofertadas */
   items: TimelineItem[];
@@ -183,6 +183,9 @@ export interface Timeline extends EntityModel {
  * @export
  */
 export interface MergedTimeLine {
+  /** id da timeline que participa da junção */
+  id: string;
+
   /** time line que participa de uma junção */
   timelineRef: ObjectReference;
 
@@ -232,7 +235,7 @@ export interface PerformedSubject {
   mergingPlanned: MergePlanning;
 
   /** dados de eletiva oferecida */
-  subjectGroupName: string;
+  electibleSubject: ObjectReference;
 
   /** disciplina equivalente que foi ofertada em lugar da disciplina original */
   equivalentSubject: ObjectReference;
@@ -246,7 +249,17 @@ export interface TimelineItem {
   performed: PerformedSubject;
 }
 
+export enum SyllabusItemType {
+  ELECTIVE = 'ELECTIVE',
+  ELECTIBLE = 'ELECTIBLE',
+  MANDATORY = 'MANDATORY',
+  OPTIONAL = 'OPTIONAL',
+}
+
 export interface SyllabusItem {
+  /** tipo o item da matriz */
+  type: SyllabusItemType;
+
   /** Código da disciplina associada */
   subjectCode: string;
 
@@ -269,18 +282,22 @@ export interface SyllabusItem {
 export interface SubjectGroup {
   groupName: string;
 
-  /** Horas de crédito total para as disciplinas deste grupo */
-  groupCreditHours: number;
+  /**
+   * Lista de disciplinas <strong>ELETIVAS</strong>. São <i>slots</i> na matriz
+   * curricular que deverão ser substituídas por alguma disciplina
+   * <strong>ELEGÍVEL</strong>
+   */
+  electiveSubjects: SyllabusItem[];
 
-  /** Lista de disciplinas eletivas */
-  items: Set<SyllabusItem>;
+  /**
+   * Lista de disciplinas <strong>ELEGÍVEL</strong>. São as disciplinas aptas a
+   * ocuparem o lugar de uma das disciplinas indicadas na lista de
+   * <strong>ELETIVAS</strong>
+   */
+  electibleSubjects: SyllabusItem[];
 }
 
 export class Syllabus {
-  readonly MANDATORY: string = 'Obrigatórias';
-  readonly ELECTIVE: string = 'Eletivas';
-  readonly OPTATIVE: string = 'Optativas';
-
   /** Data de Homologação da Matriz */
   homologationDate: Moment;
 
@@ -309,14 +326,19 @@ export class Syllabus {
   name: string;
 
   /** Disciplinas OBRIGATÓRIAS */
-  mandatorySubjects: Set<SyllabusItem>;
+  subjects: SyllabusItem[];
 
   /** Disciplinas ELETIVAS */
-  electiveSubjectsGroups: Set<SubjectGroup>;
+  electiveGroups: SubjectGroup[];
 
-  /** Disciplinas OPTATIVAS */
-  optativeSubjectsRefs: Set<ObjectReference>;
+  /**
+   * Grupo padrão de eletivas. No processo de integração toda vez que uma matriz é
+   * criada, um grupo padrão de eletivas é criado também, para abrigar as
+   * disciplinas eletivas cujo grupo de eletivas pode não existir no sistema de
+   * origem
+   */
+  defaultElectiveGroup: SubjectGroup;
 
   /** Cursos que utilizam esta Matriz **/
-  courseRefs: Set<ObjectReference>;
+  courseRefs: ObjectReference[];
 }
